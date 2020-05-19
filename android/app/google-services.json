@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "727689186578",
+    "firebase_url": "https://tinanh-8f0ba.firebaseio.com",
+    "project_id": "tinanh-8f0ba",
+    "storage_bucket": "tinanh-8f0ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727689186578:android:7e8168744d5c074414b7cb",
+        "android_client_info": {
+          "package_name": "com.tinanh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727689186578-ajihn9008lo8kechj9qbh7ghc1ki58gc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tinanh",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "727689186578-kkvpio0s9b627cgfup6g70mfd7i7bo9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM1c-W2MMrCbNQKdNxrck6njvD0jE4Lnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "727689186578-kkvpio0s9b627cgfup6g70mfd7i7bo9n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
