@@ -1,16 +1,16 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import HomeScreen from '../containers/HomeScreen/HomeScreen';
-import MatchesScreen from '../containers/MatchesScreen/MatchesScreen';
 import MessengerScreen from '../containers/MessengerScreen/MessengerScreen';
 import ProfileScreen from '../containers/ProfileScreen/ProfileScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
-const MatchesStack = createStackNavigator();
 const MessengerStack = createStackNavigator();
 
 const HomeStackScreen = () => {
@@ -22,14 +22,6 @@ const HomeStackScreen = () => {
   );
 };
 
-const MatchesStackScreen = () => {
-  return (
-    <MatchesStack.Navigator>
-      <MatchesStack.Screen name="MatchesScreen" component={MatchesScreen} options={{ headerShown: false }} />
-    </MatchesStack.Navigator>
-  );
-};
-
 const MessengerStackScreen = () => {
   return (
     <MessengerStack.Navigator>
@@ -38,16 +30,28 @@ const MessengerStackScreen = () => {
   );
 };
 
-const App = () => {
+const Navigator = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="HomeScreen" component={HomeStackScreen} />
-        <Tab.Screen name="MatchesScreen" component={MatchesStackScreen} />
-        <Tab.Screen name="MessengerScreen" component={MessengerStackScreen} />
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            if (route.name === 'Home') {
+              return <MaterialCommunityIcons name="google-home" size={size} color={color} />;
+            } else if (route.name === 'Message') {
+              return <Ionicons name="ios-chatbubbles" size={size} color={color} />;
+            }
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}>
+        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Message" component={MessengerStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
 };
 
-export default App;
+export default Navigator;

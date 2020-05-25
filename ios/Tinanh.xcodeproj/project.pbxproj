@@ -8,19 +8,31 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* TinanhTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TinanhTests.m */; };
+		04F25A4D22FF46C09BB80AB9 /* Exo2-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C71B8F2958E2430E974687FA /* Exo2-Light.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1BE5AC515D194A3BB1A49281 /* Exo2-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6F66EF7399F43CCA5AB3530 /* Exo2-Bold.ttf */; };
+		2747E637401A4015BF57C250 /* Exo2-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60CD3DF4A3BB4F788AF57E21 /* Exo2-BoldItalic.ttf */; };
+		2815AC3786CD43488A343F69 /* Exo2-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 05BFB88964C34571A56DBFE2 /* Exo2-ExtraBoldItalic.ttf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* TinanhTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TinanhTests.m */; };
+		331C2E9D7C074183A8F87EA9 /* Exo2-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A4A84CC884954002B0F96DF7 /* Exo2-Medium.ttf */; };
 		4DD83CE840DAD10237577308 /* libPods-Tinanh-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2520049969DB7191EB43D511 /* libPods-Tinanh-tvOS.a */; };
 		522869F4DF20281CF9941CB5 /* libPods-Tinanh.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D5A0B57A92BB095D859B7F7 /* libPods-Tinanh.a */; };
+		74B6CBB117B34805942AAE58 /* Exo2-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F432074D3B7144BDBED4F113 /* Exo2-Italic.ttf */; };
+		7EE1A3D072954DB69021950F /* Exo2-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 742CB240028A48E2A565D6A8 /* Exo2-SemiBoldItalic.ttf */; };
 		821928A024979F9B9C6D55B6 /* libPods-Tinanh-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8A76696833DB4F977AB1746 /* libPods-Tinanh-tvOSTests.a */; };
 		8C3A18F967BC11651D169C14 /* libPods-Tinanh-TinanhTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19B99C94A47BA89F5BACB162 /* libPods-Tinanh-TinanhTests.a */; };
 		90FB23E7243AE74A00AD4F41 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 90FB23E6243AE74A00AD4F41 /* GoogleService-Info.plist */; };
+		9822EC6E51CE4909A4F06775 /* Exo2-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 82F398B0CC844BB9BEC3A4BE /* Exo2-LightItalic.ttf */; };
+		B20E4BFE1F0649C8B759BEE1 /* Exo2-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1D81D1FBFC574340B9E55B69 /* Exo2-ExtraBold.ttf */; };
+		D327B125752D4EE08796A435 /* Exo2-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7DC5D858EC14F50B292230D /* Exo2-Regular.ttf */; };
+		EED0CCCC1ED14A1C95B2130F /* Exo2-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4840FED642445A29BD34F9E /* Exo2-MediumItalic.ttf */; };
+		FF690904A19248B7BAB4D7E9 /* Exo2-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21BD9F8D3A3F43C9BBD27B93 /* Exo2-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +57,9 @@
 		00E356EE1AD99517003FC87E /* TinanhTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinanhTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* TinanhTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TinanhTests.m; sourceTree = "<group>"; };
+		039103E314E14422BFDA8884 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		056A9E8D16F9382C52182639 /* Pods-Tinanh-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinanh-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Tinanh-tvOSTests/Pods-Tinanh-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		05BFB88964C34571A56DBFE2 /* Exo2-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/Exo2-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		08208C0CA96DBC668FCD701E /* Pods-Tinanh.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinanh.debug.xcconfig"; path = "Target Support Files/Pods-Tinanh/Pods-Tinanh.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Tinanh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tinanh.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Tinanh/AppDelegate.h; sourceTree = "<group>"; };
@@ -56,18 +70,44 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Tinanh/main.m; sourceTree = "<group>"; };
 		19B99C94A47BA89F5BACB162 /* libPods-Tinanh-TinanhTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tinanh-TinanhTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A444380F96846E735DBC777 /* Pods-Tinanh-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinanh-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Tinanh-tvOS/Pods-Tinanh-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		1A6D0D7DF6E54B4799B2A67B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		1CCDCCB3CFB8431BAC806F36 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		1D81D1FBFC574340B9E55B69 /* Exo2-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-ExtraBold.ttf"; path = "../src/assets/fonts/Exo2-ExtraBold.ttf"; sourceTree = "<group>"; };
+		21BD9F8D3A3F43C9BBD27B93 /* Exo2-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-SemiBold.ttf"; path = "../src/assets/fonts/Exo2-SemiBold.ttf"; sourceTree = "<group>"; };
 		246E856BF4F5A05CA9112FD0 /* Pods-Tinanh-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinanh-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Tinanh-tvOSTests/Pods-Tinanh-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2520049969DB7191EB43D511 /* libPods-Tinanh-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tinanh-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E47B1E0B4A5D006451C7 /* Tinanh-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tinanh-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Tinanh-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tinanh-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		451645538482414497E0D508 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		4D5A0B57A92BB095D859B7F7 /* libPods-Tinanh.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tinanh.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		60CD3DF4A3BB4F788AF57E21 /* Exo2-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-BoldItalic.ttf"; path = "../src/assets/fonts/Exo2-BoldItalic.ttf"; sourceTree = "<group>"; };
 		65FDF1D9D6DF312C87B75A5F /* Pods-Tinanh-TinanhTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinanh-TinanhTests.release.xcconfig"; path = "Target Support Files/Pods-Tinanh-TinanhTests/Pods-Tinanh-TinanhTests.release.xcconfig"; sourceTree = "<group>"; };
+		71F1E8185FE942CEB7527046 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
+		73142C2CA548427681081932 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		742CB240028A48E2A565D6A8 /* Exo2-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Exo2-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		7987E52A77E74B43A307E90E /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
+		7EA77310E0B44DCFA4108B14 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		82F398B0CC844BB9BEC3A4BE /* Exo2-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-LightItalic.ttf"; path = "../src/assets/fonts/Exo2-LightItalic.ttf"; sourceTree = "<group>"; };
 		90FB23E6243AE74A00AD4F41 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A4A84CC884954002B0F96DF7 /* Exo2-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-Medium.ttf"; path = "../src/assets/fonts/Exo2-Medium.ttf"; sourceTree = "<group>"; };
+		A6C43F691AF24CDA8BC462A8 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		A7B8C5C5D0AF74178CFC07A3 /* Pods-Tinanh-TinanhTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinanh-TinanhTests.debug.xcconfig"; path = "Target Support Files/Pods-Tinanh-TinanhTests/Pods-Tinanh-TinanhTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A7DC5D858EC14F50B292230D /* Exo2-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-Regular.ttf"; path = "../src/assets/fonts/Exo2-Regular.ttf"; sourceTree = "<group>"; };
+		AD298AADF668456F96CB6C4E /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		B9D41A73BA9C46CFBE0D0619 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		BD231AA46E55C822FCD1FE82 /* Pods-Tinanh-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinanh-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Tinanh-tvOS/Pods-Tinanh-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		BED2E91BD94B16B452DD2D14 /* Pods-Tinanh.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinanh.release.xcconfig"; path = "Target Support Files/Pods-Tinanh/Pods-Tinanh.release.xcconfig"; sourceTree = "<group>"; };
+		C49B45524F04461F8D0FF740 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		C71B8F2958E2430E974687FA /* Exo2-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-Light.ttf"; path = "../src/assets/fonts/Exo2-Light.ttf"; sourceTree = "<group>"; };
+		CC4DF4D229CE4373BD9F4B3A /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		D6F66EF7399F43CCA5AB3530 /* Exo2-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-Bold.ttf"; path = "../src/assets/fonts/Exo2-Bold.ttf"; sourceTree = "<group>"; };
+		D7BDE24F80DF4E518E488A21 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		E4840FED642445A29BD34F9E /* Exo2-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-MediumItalic.ttf"; path = "../src/assets/fonts/Exo2-MediumItalic.ttf"; sourceTree = "<group>"; };
+		EBEB64E1EF794BFFB55F264D /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F05DDEB9E5754817BF6CB381 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		F432074D3B7144BDBED4F113 /* Exo2-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo2-Italic.ttf"; path = "../src/assets/fonts/Exo2-Italic.ttf"; sourceTree = "<group>"; };
 		F8A76696833DB4F977AB1746 /* libPods-Tinanh-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tinanh-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -183,6 +223,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				546B8E23B44B8B7064DE790E /* Pods */,
+				EE6415BF96264BBD9AD0AC1A /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -198,6 +239,41 @@
 				2D02E4901E0B4A5D006451C7 /* Tinanh-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		EE6415BF96264BBD9AD0AC1A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CC4DF4D229CE4373BD9F4B3A /* AntDesign.ttf */,
+				451645538482414497E0D508 /* Entypo.ttf */,
+				F05DDEB9E5754817BF6CB381 /* EvilIcons.ttf */,
+				7987E52A77E74B43A307E90E /* Feather.ttf */,
+				1A6D0D7DF6E54B4799B2A67B /* FontAwesome.ttf */,
+				B9D41A73BA9C46CFBE0D0619 /* FontAwesome5_Brands.ttf */,
+				AD298AADF668456F96CB6C4E /* FontAwesome5_Regular.ttf */,
+				71F1E8185FE942CEB7527046 /* FontAwesome5_Solid.ttf */,
+				039103E314E14422BFDA8884 /* Fontisto.ttf */,
+				C49B45524F04461F8D0FF740 /* Foundation.ttf */,
+				D7BDE24F80DF4E518E488A21 /* Ionicons.ttf */,
+				1CCDCCB3CFB8431BAC806F36 /* MaterialCommunityIcons.ttf */,
+				73142C2CA548427681081932 /* MaterialIcons.ttf */,
+				7EA77310E0B44DCFA4108B14 /* Octicons.ttf */,
+				EBEB64E1EF794BFFB55F264D /* SimpleLineIcons.ttf */,
+				A6C43F691AF24CDA8BC462A8 /* Zocial.ttf */,
+				D6F66EF7399F43CCA5AB3530 /* Exo2-Bold.ttf */,
+				60CD3DF4A3BB4F788AF57E21 /* Exo2-BoldItalic.ttf */,
+				1D81D1FBFC574340B9E55B69 /* Exo2-ExtraBold.ttf */,
+				05BFB88964C34571A56DBFE2 /* Exo2-ExtraBoldItalic.ttf */,
+				F432074D3B7144BDBED4F113 /* Exo2-Italic.ttf */,
+				C71B8F2958E2430E974687FA /* Exo2-Light.ttf */,
+				82F398B0CC844BB9BEC3A4BE /* Exo2-LightItalic.ttf */,
+				A4A84CC884954002B0F96DF7 /* Exo2-Medium.ttf */,
+				E4840FED642445A29BD34F9E /* Exo2-MediumItalic.ttf */,
+				A7DC5D858EC14F50B292230D /* Exo2-Regular.ttf */,
+				21BD9F8D3A3F43C9BBD27B93 /* Exo2-SemiBold.ttf */,
+				742CB240028A48E2A565D6A8 /* Exo2-SemiBoldItalic.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,7 +367,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1150;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
@@ -347,6 +423,18 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				90FB23E7243AE74A00AD4F41 /* GoogleService-Info.plist in Resources */,
+				1BE5AC515D194A3BB1A49281 /* Exo2-Bold.ttf in Resources */,
+				2747E637401A4015BF57C250 /* Exo2-BoldItalic.ttf in Resources */,
+				B20E4BFE1F0649C8B759BEE1 /* Exo2-ExtraBold.ttf in Resources */,
+				2815AC3786CD43488A343F69 /* Exo2-ExtraBoldItalic.ttf in Resources */,
+				74B6CBB117B34805942AAE58 /* Exo2-Italic.ttf in Resources */,
+				04F25A4D22FF46C09BB80AB9 /* Exo2-Light.ttf in Resources */,
+				9822EC6E51CE4909A4F06775 /* Exo2-LightItalic.ttf in Resources */,
+				331C2E9D7C074183A8F87EA9 /* Exo2-Medium.ttf in Resources */,
+				EED0CCCC1ED14A1C95B2130F /* Exo2-MediumItalic.ttf in Resources */,
+				D327B125752D4EE08796A435 /* Exo2-Regular.ttf in Resources */,
+				FF690904A19248B7BAB4D7E9 /* Exo2-SemiBold.ttf in Resources */,
+				7EE1A3D072954DB69021950F /* Exo2-SemiBoldItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -749,6 +837,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A7B8C5C5D0AF74178CFC07A3 /* Pods-Tinanh-TinanhTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -772,6 +861,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 65FDF1D9D6DF312C87B75A5F /* Pods-Tinanh-TinanhTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = TinanhTests/Info.plist;
