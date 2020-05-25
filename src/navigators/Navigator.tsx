@@ -32,25 +32,23 @@ const MessengerStackScreen = () => {
 
 const Navigator = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            if (route.name === 'Home') {
-              return <MaterialCommunityIcons name="google-home" size={size} color={color} />;
-            } else if (route.name === 'Message') {
-              return <Ionicons name="ios-chatbubbles" size={size} color={color} />;
-            }
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: 'tomato',
-          inactiveTintColor: 'gray',
-        }}>
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Message" component={MessengerStackScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          if (route.name === 'Home') {
+            return <MaterialCommunityIcons name="google-home" size={size} color={color} />;
+          } else if (route.name === 'Message') {
+            return <Ionicons name="ios-chatbubbles" size={size} color={color} />;
+          }
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: 'tomato',
+        inactiveTintColor: 'gray',
+      }}>
+      <Tab.Screen name="Home" component={HomeStackScreen} />
+      <Tab.Screen name="Message" component={MessengerStackScreen} />
+    </Tab.Navigator>
   );
 };
 
