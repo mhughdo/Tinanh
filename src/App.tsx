@@ -50,7 +50,13 @@ function App() {
       <Stack.Navigator>
         {isInitializing ? (
           // We haven't finished checking for the token yet
-          <Stack.Screen name="Splash" component={SplashScreen} />
+          <Stack.Screen
+            name="Splash"
+            component={SplashScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
         ) : auth === null ? (
           // No token found, user isn't signed in
           <>

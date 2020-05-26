@@ -6,6 +6,9 @@ import colors from '@constants/Colors';
 import normalize from 'react-native-normalize';
 import { Form, Item, Input, Button, Toast, Spinner } from 'native-base';
 import auth from '@react-native-firebase/auth';
+import { getSnapshotFromUserAuth } from '../utils/firebase';
+import { useAppState } from '../store/appState';
+import { AppActionType } from '../reducers/appReducer';
 
 const isValidEmail = (email: string) => {
   let pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -18,6 +21,7 @@ const SignUp = ({ navigation: { navigate } }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
+  const { dispatch } = useAppState();
 
   const handleSignUp = () => {
     if (!email || !password || !confirmPassword || !name) {
@@ -34,6 +38,13 @@ const SignUp = ({ navigation: { navigate } }) => {
         type: 'warning',
         duration: 3000,
       });
+    } else if (password.length < 8 || confirmPassword.length < 8) {
+      Toast.show({
+        text: 'Min password length is 8',
+        buttonText: 'Okay',
+        type: 'warning',
+        duration: 3000,
+      });
     } else if (password !== confirmPassword) {
       Toast.show({
         text: 'Password and Confirm Password does not match!',
@@ -45,10 +56,15 @@ const SignUp = ({ navigation: { navigate } }) => {
 
     setLoading(true);
     auth()
-      .createUserWithEmailAndPassword('sarah.lane@gmail.com', 'SuperSecretPassword!')
-      .then((data) => {
-        console.log(data.user);
-        console.log('User account created & signed in!');
+      .createUserWithEmailAndPassword(email, password)
+      .then(async (data) => {
+        const userSnapshot = await getSnapshotFromUserAuth(data.user, {});
+        if (userSnapshot) {
+          console.log(userSnapshot.data());
+
+          dispatch({ type: AppActionType.AUTH_CHANGE, auth: { id: userSnapshot.id, ...userSnapshot.data() } });
+        }
+
         setLoading(false);
       })
       .catch((error) => {

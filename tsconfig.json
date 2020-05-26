@@ -39,12 +39,16 @@
     "baseUrl": "./" /* Base directory to resolve non-absolute module
     names. */,
     "paths": {
-      "*": ["./src/*"],
+      "@*": ["./src/*"],
       "@components": ["./src/components/*"],
       "@constants": ["./src/constants/*"],
       "@containers": ["./src/containers/*"],
       "@images": ["./src/assets/images/*"],
-      "@shared": ["./src/shared/*"]
+      "@shared": ["./src/shared/*"],
+      "@hooks": ["./src/hooks/*"],
+      "@reducers": ["./src/reducers/*"],
+      "@utils": ["./src/utils/*"],
+      "@store": ["./src/store/*"]
     },
     // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */

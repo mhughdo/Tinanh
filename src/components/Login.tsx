@@ -4,12 +4,35 @@ import GoBackHeader from '@shared/GoBackHeader';
 import fontSize from '@constants/fontSize';
 import colors from '@constants/Colors';
 import normalize from 'react-native-normalize';
-import { Form, Item, Input, Button } from 'native-base';
+import { Form, Item, Input, Button, Toast, Spinner } from 'native-base';
+import firebaseAuth from '@react-native-firebase/auth';
 
 const Login = ({ navigation: { navigate } }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   // const {signIn} = useContext(authContext)
+
+  const signIn = async () => {
+    if (!email || !password) {
+      Toast.show({
+        text: 'All fields are required!',
+        buttonText: 'Okay',
+        type: 'warning',
+        duration: 3000,
+      });
+    }
+    setLoading(true);
+    firebaseAuth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
 
   return (
     <SafeAreaView>
@@ -55,13 +78,17 @@ const Login = ({ navigation: { navigate } }) => {
         </Form>
       </View>
       <View style={styles.logInButtonContainer}>
-        <Button style={styles.logInButton} rounded onPress={() => {}}>
-          <Text
-            style={{
-              color: 'white',
-            }}>
-            Log In
-          </Text>
+        <Button style={styles.logInButton} rounded onPress={signIn}>
+          {loading ? (
+            <Spinner color="white" />
+          ) : (
+            <Text
+              style={{
+                color: 'white',
+              }}>
+              Log In
+            </Text>
+          )}
         </Button>
       </View>
       <View style={styles.signUpInContainer}>
