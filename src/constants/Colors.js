@@ -9,6 +9,7 @@ export default {
   grey3: '#e6e6f2',
   grey6: '#d6d6d6',
   grey9: '#939393',
+  blue: '#4299E1',
   onlineMarkColor: '#41C61B',
   inputBgColor: '#eeeeee',
 };

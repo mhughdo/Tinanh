@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { Root } from 'native-base';
-import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Navigator from './navigators/Navigator';
 import LoginScreen from '@components/Login';
 import OpeningScreen from '@components/OpeningScreen';
-import { AppStateProvider, useAppState } from './store/appState';
-import { AppActionType, appStateReducer } from './reducers/appReducer';
+import { AppStateProvider } from './store/appState';
+import { appStateReducer } from './reducers/appReducer';
 import SignUpScreen from '@components/SignUp';
 import Logo from '@images/Logo';
 import useAuth from './hooks/useAuth';
@@ -90,7 +89,13 @@ function App() {
           </>
         ) : (
           // User is signed in
-          <Stack.Screen name="Home" component={Navigator} />
+          <Stack.Screen
+            name="Home"
+            component={Navigator}
+            options={{
+              headerShown: false,
+            }}
+          />
         )}
       </Stack.Navigator>
     </NavigationContainer>
