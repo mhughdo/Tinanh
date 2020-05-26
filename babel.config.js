@@ -11,6 +11,7 @@ module.exports = {
           '@containers': './src/containers',
           '@components': './src/components',
           '@images': './src/assets/images',
+          '@shared': './src/shared',
         },
       },
     ],
