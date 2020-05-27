@@ -14,6 +14,12 @@ import useAuth from './hooks/useAuth';
 import AddUserInfoScreen from '@components/AddUserInfo';
 import Geolocation from 'react-native-geolocation-service';
 import firebaseAuth from '@react-native-firebase/auth';
+import functions, { firebase } from '@react-native-firebase/functions';
+
+// Use a local emulator in development
+if (__DEV__) {
+  functions().useFunctionsEmulator('http://localhost:5001');
+}
 
 //WARNING SUPPRESSION
 import { YellowBox } from 'react-native';
@@ -66,6 +72,15 @@ function App() {
   //   firebaseAuth()
   //     .signOut()
   //     .then(() => console.log('User signed out!'));
+  // }, []);
+
+  // useEffect(() => {
+  //   async function getData() {
+  //     const data = await functions().httpsCallable('listProducts')();
+  //     console.log(data);
+  //   }
+
+  //   getData();
   // }, []);
 
   return (

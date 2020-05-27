@@ -10,6 +10,7 @@ export default {
   grey6: '#d6d6d6',
   grey9: '#939393',
   blue: '#4299E1',
+  indigo500: '#667EEA',
   onlineMarkColor: '#41C61B',
   inputBgColor: '#eeeeee',
 };

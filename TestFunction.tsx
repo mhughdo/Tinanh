@@ -6,14 +6,7 @@ const TestFunction = () => {
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState(true);
   useEffect(() => {
-    firestore()
-      .collection('users')
-      .doc('pNBgGRKMNgWpQAQSTL25')
-      .get()
-      .then((documentSnapshot) => {
-        setText(documentSnapshot.data().name);
-        setLoading(false);
-      });
+
   }, []);
 
   if (loading) {
