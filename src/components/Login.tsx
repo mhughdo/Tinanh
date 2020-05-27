@@ -30,6 +30,12 @@ const Login = ({ navigation: { navigate } }) => {
       })
       .catch((error) => {
         console.log(error);
+        Toast.show({
+          text: 'Wrong email or password!',
+          buttonText: 'Okay',
+          type: 'warning',
+          duration: 3000,
+        });
         setLoading(false);
       });
   };
@@ -53,6 +59,7 @@ const Login = ({ navigation: { navigate } }) => {
                 paddingLeft: normalize(20),
                 fontSize: fontSize.xs,
               }}
+              autoCapitalize="none"
               onChangeText={setEmail}
               value={email}
               placeholder="Email"
@@ -69,6 +76,7 @@ const Login = ({ navigation: { navigate } }) => {
                 paddingLeft: normalize(20),
                 fontSize: fontSize.xs,
               }}
+              autoCapitalize="none"
               secureTextEntry={true}
               onChangeText={setPassword}
               value={password}

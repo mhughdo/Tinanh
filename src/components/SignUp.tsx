@@ -58,10 +58,9 @@ const SignUp = ({ navigation: { navigate } }) => {
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(async (data) => {
-        const userSnapshot = await getSnapshotFromUserAuth(data.user, {});
+        const isNewUser = data.additionalUserInfo?.isNewUser;
+        const userSnapshot = await getSnapshotFromUserAuth(data.user, { isNewUser, displayName: name });
         if (userSnapshot) {
-          console.log(userSnapshot.data());
-
           dispatch({ type: AppActionType.AUTH_CHANGE, auth: { id: userSnapshot.id, ...userSnapshot.data() } });
         }
 
@@ -109,6 +108,7 @@ const SignUp = ({ navigation: { navigate } }) => {
                 paddingLeft: normalize(20),
                 fontSize: fontSize.xs,
               }}
+              autoCapitalize="none"
               onChangeText={setName}
               value={name}
               placeholder="Name"
@@ -125,6 +125,7 @@ const SignUp = ({ navigation: { navigate } }) => {
                 paddingLeft: normalize(20),
                 fontSize: fontSize.xs,
               }}
+              autoCapitalize="none"
               onChangeText={setEmail}
               value={email}
               placeholder="E-mail Address"
@@ -142,6 +143,7 @@ const SignUp = ({ navigation: { navigate } }) => {
                 fontSize: fontSize.xs,
               }}
               secureTextEntry={true}
+              autoCapitalize="none"
               onChangeText={setPassword}
               value={password}
               placeholder="Password"
@@ -158,6 +160,7 @@ const SignUp = ({ navigation: { navigate } }) => {
                 paddingLeft: normalize(20),
                 fontSize: fontSize.xs,
               }}
+              autoCapitalize="none"
               secureTextEntry={true}
               onChangeText={setConfirmPassword}
               value={confirmPassword}

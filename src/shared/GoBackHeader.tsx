@@ -6,12 +6,24 @@ import { Button } from 'native-base';
 import colors from '@constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 
-const GoBackHeader = () => {
+type Props = {
+  onPress?: () => void;
+};
+
+const GoBackHeader: React.FC<Props> = ({ onPress }) => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <Button onPress={() => navigation.goBack()} transparent>
+      <Button
+        onPress={() => {
+          if (onPress) {
+            onPress();
+          } else {
+            navigation.goBack();
+          }
+        }}
+        transparent>
         <Ionicons name="ios-arrow-back" size={30} color={colors.mainThemeForegroundColor} />
       </Button>
     </View>

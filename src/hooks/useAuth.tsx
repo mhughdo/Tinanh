@@ -14,8 +14,9 @@ export default function useAuth() {
       if (!userSnapshot) {
         dispatch({ type: AppActionType.AUTH_CHANGE, auth: null });
         return null;
+      } else {
+        dispatch({ type: AppActionType.AUTH_CHANGE, auth: { id: userSnapshot.id, ...userSnapshot.data() } });
       }
-      dispatch({ type: AppActionType.AUTH_CHANGE, auth: { id: userSnapshot.id, ...userSnapshot.data() } });
     }
     const subscriber = firebaseAuth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount

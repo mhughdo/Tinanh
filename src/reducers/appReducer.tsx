@@ -1,4 +1,5 @@
-type user = {
+type userType = {
+  id: string;
   displayName: string;
   email: string;
   photos: string[];
@@ -14,6 +15,7 @@ type user = {
   age: number;
   school: string;
   work: string;
+  isNewUser: boolean;
 };
 
 export enum AppActionType {
@@ -27,14 +29,14 @@ export type InitialStateType = {
   isInitializing: boolean;
   isSignout: boolean;
   userToken: null;
-  auth: {};
+  auth: userType | null;
 };
 
 export type AppActionTypes =
   | { type: AppActionType.RESTORE_TOKEN; token: string | null | undefined }
   | { type: AppActionType.AUTH_CHANGE; auth: {} | null }
-  | { type: AppActionType.SIGN_IN; token: string | null | undefined; auth: {} | null }
-  | { type: AppActionType.SIGN_OUT; token: string | null | undefined; auth: {} | null };
+  | { type: AppActionType.SIGN_IN; token: string | null | undefined; auth: Partial<userType> | null }
+  | { type: AppActionType.SIGN_OUT; token: string | null | undefined; auth: Partial<userType> | null };
 
 export const appStateReducer = (state: InitialStateType, action: AppActionTypes) => {
   // TODO edit RESTORE_TOKEN and AUTH_CHANGE action

@@ -5,7 +5,7 @@ const initialState = {
   isInitializing: true,
   isSignout: false,
   userToken: null,
-  auth: {},
+  auth: null,
 };
 
 const AppContext = createContext<{

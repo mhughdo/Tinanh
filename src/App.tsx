@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Platform, PermissionsAndroid } from 'react-native';
 import { Root } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -11,6 +11,8 @@ import { appStateReducer } from './reducers/appReducer';
 import SignUpScreen from '@components/SignUp';
 import Logo from '@images/Logo';
 import useAuth from './hooks/useAuth';
+import AddUserInfoScreen from '@components/AddUserInfo';
+import Geolocation from 'react-native-geolocation-service';
 import firebaseAuth from '@react-native-firebase/auth';
 
 //WARNING SUPPRESSION
@@ -35,8 +37,30 @@ function SplashScreen() {
 
 const Stack = createStackNavigator();
 
+const requesrPermission = async () => {
+  if (Platform.OS !== 'android') {
+    Geolocation.requestAuthorization();
+  } else {
+    try {
+      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+        title: 'Tin anh',
+        message: "App needs access to your phone's location",
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      });
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+};
+
 function App() {
   const { auth, isInitializing } = useAuth();
+  console.log(auth);
 
   // useEffect(() => {
   //   firebaseAuth()
@@ -80,6 +104,18 @@ function App() {
             <Stack.Screen
               name="SignUp"
               component={SignUpScreen}
+              options={{
+                headerShown: false,
+                // When logging out, a pop animation feels intuitive
+                // animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+              }}
+            />
+          </>
+        ) : auth.isNewUser === true ? (
+          <>
+            <Stack.Screen
+              name="AddUserInfo"
+              component={AddUserInfoScreen}
               options={{
                 headerShown: false,
                 // When logging out, a pop animation feels intuitive
