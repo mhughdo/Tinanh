@@ -132,6 +132,7 @@ android {
         applicationId "com.tinanh"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
     }
@@ -229,6 +230,10 @@ buildscript {
   dependencies {
     // ... other dependencies
     classpath 'com.google.gms:google-services:4.3.3'
+  }
+  repositories {
+    google()
+    jcenter()
   }
 }
 
