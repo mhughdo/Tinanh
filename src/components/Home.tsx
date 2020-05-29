@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Text } from 'native-base';
 import normalize from 'react-native-normalize';
@@ -9,8 +9,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Header from '@shared/Header';
 
 const Home = () => {
-  const [swiper, setSwiper] = useState<any>();
-
+  const swiper = useRef<CardStack | null>();
   return (
     <View style={styles.homeContaier}>
       <Header />
@@ -21,7 +20,7 @@ const Home = () => {
           secondCardZoom={1}
           renderNoMoreCards={() => null}
           ref={(cardSwiper) => {
-            setSwiper(cardSwiper);
+            swiper.current = cardSwiper;
           }}>
           {Array.from({ length: 20 }).map((_, index) => {
             return (
@@ -32,13 +31,13 @@ const Home = () => {
           })}
         </CardStack>
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity onPress={() => swiper.swipeLeft()} style={[styles.circle]}>
+          <TouchableOpacity onPress={() => swiper?.current?.swipeLeft()} style={[styles.circle]}>
             <Ionicons name="md-close" size={40} color={colors.mainThemeForegroundColor} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => swiper.swipeTop()} style={[styles.circle, styles.smallCircle]}>
+          <TouchableOpacity onPress={() => swiper?.current?.swipeTop()} style={[styles.circle, styles.smallCircle]}>
             <Ionicons name="ios-star" size={30} color={colors.blue} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => swiper.swipeRight()} style={styles.circle}>
+          <TouchableOpacity onPress={() => swiper?.current?.swipeRight()} style={styles.circle}>
             <Ionicons name="ios-heart" size={36} color={colors.onlineMarkColor} />
           </TouchableOpacity>
         </View>

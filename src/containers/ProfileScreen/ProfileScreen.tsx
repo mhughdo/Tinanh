@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, TouchableOpacity, Image, Platform } from 'react-native';
 import Header from '@shared/Header';
 import DefaultAvatar from '@images/default-avatar';
 import normalize from 'react-native-normalize';
@@ -9,15 +9,34 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Colors from '@constants/Colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Button, Text } from 'native-base';
+import { Button, Text, Toast } from 'native-base';
 import firebaseAuth from '@react-native-firebase/auth';
 import { useAppState } from '@store/appState';
 import { AppActionType } from '@reducers/appReducer';
+import ImagePicker from 'react-native-image-picker';
+import { uploadFileToFireBase, createStorageReferenceToFile, getFileLocalPath } from '@utils/index';
+
+// TODO set imageURI for android
 
 const ProfileScreen = () => {
+  const [imagesURI, setImagesURI] = useState({});
   const { auth } = useAuth();
   const displayName = auth?.displayName || '';
   const { dispatch } = useAppState();
+
+  const uploadFile = (idx: number) => {
+    ImagePicker.launchImageLibrary({ noData: true }, async (response) => {
+      if (response.didCancel) {
+        console.log('Post canceled');
+      } else if (response.error) {
+        console.log('An error occurred: ', response.error);
+      } else {
+        setImagesURI({ ...imagesURI, [idx]: { uri: response.uri } });
+        const ref = createStorageReferenceToFile(`${auth?.id}/${auth?.displayName}-${idx}`);
+        await ref(getFileLocalPath(response));
+      }
+    });
+  };
 
   const logOut = () => {
     if (auth) {
@@ -41,9 +60,16 @@ const ProfileScreen = () => {
         <View style={styles.photos}>
           {Array.from({ length: 6 }).map((_, idx) => {
             return (
-              <View style={styles.photo}>
-                <Entypo name="camera" color="white" size={normalize(30)} />
-              </View>
+              <TouchableOpacity onPress={() => uploadFile(idx)} style={styles.photo}>
+                {imagesURI[idx] ? (
+                  <Image
+                    style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, resizeMode: 'cover' }}
+                    source={imagesURI[idx]}
+                  />
+                ) : (
+                  <Entypo name="camera" color="white" size={normalize(30)} />
+                )}
+              </TouchableOpacity>
             );
           })}
         </View>
