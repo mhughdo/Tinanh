@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, Platform } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import Header from '@shared/Header';
 import DefaultAvatar from '@images/default-avatar';
 import normalize from 'react-native-normalize';
@@ -9,20 +9,48 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Colors from '@constants/Colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Button, Text, Toast } from 'native-base';
+import { Button, Text, Toast, Spinner } from 'native-base';
+import storage, { FirebaseStorageTypes } from '@react-native-firebase/storage';
 import firebaseAuth from '@react-native-firebase/auth';
 import { useAppState } from '@store/appState';
 import { AppActionType } from '@reducers/appReducer';
 import ImagePicker from 'react-native-image-picker';
-import { uploadFileToFireBase, createStorageReferenceToFile, getFileLocalPath } from '@utils/index';
+import { uploadFileToFireBase } from '@utils/index';
 
 // TODO set imageURI for android
 
+type ImagesType = {
+  [key: number]: {
+    uri: string;
+    loading: boolean;
+  };
+};
+
 const ProfileScreen = () => {
-  const [imagesURI, setImagesURI] = useState({});
+  const [images, setImages] = useState<ImagesType>({});
   const { auth } = useAuth();
   const displayName = auth?.displayName || '';
   const { dispatch } = useAppState();
+
+  const monitorFileUpload = (task: FirebaseStorageTypes.Task, idx: number) => {
+    task.on(
+      storage.TaskEvent.STATE_CHANGED,
+      async (snapshot) => {
+        if (snapshot.state === storage.TaskState.SUCCESS) {
+          console.log('Image uploaded to the bucket');
+          setImages({ ...images, [idx]: { uri: await snapshot.ref.getDownloadURL(), loading: false } });
+        }
+      },
+      () => {
+        return Toast.show({
+          text: 'Error uploading image!',
+          buttonText: 'Okay',
+          type: 'danger',
+          duration: 3000,
+        });
+      },
+    );
+  };
 
   const uploadFile = (idx: number) => {
     ImagePicker.launchImageLibrary({ noData: true }, async (response) => {
@@ -31,9 +59,9 @@ const ProfileScreen = () => {
       } else if (response.error) {
         console.log('An error occurred: ', response.error);
       } else {
-        setImagesURI({ ...imagesURI, [idx]: { uri: response.uri } });
-        const ref = createStorageReferenceToFile(`${auth?.id}/${auth?.displayName}-${idx}`);
-        await ref(getFileLocalPath(response));
+        setImages({ ...images, [idx]: { uri: response.uri, loading: true } });
+        const task = uploadFileToFireBase(response, `${auth?.id}/${auth?.displayName}-${idx}`);
+        monitorFileUpload(task, idx);
       }
     });
   };
@@ -59,13 +87,19 @@ const ProfileScreen = () => {
         <Text style={{ fontSize: fontSize.base }}>My photos</Text>
         <View style={styles.photos}>
           {Array.from({ length: 6 }).map((_, idx) => {
+            const image = images[idx];
+
             return (
               <TouchableOpacity onPress={() => uploadFile(idx)} style={styles.photo}>
-                {imagesURI[idx] ? (
-                  <Image
-                    style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, resizeMode: 'cover' }}
-                    source={imagesURI[idx]}
-                  />
+                {image ? (
+                  image.loading ? (
+                    <Spinner color="#ffffff" />
+                  ) : (
+                    <Image
+                      style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, resizeMode: 'cover' }}
+                      source={images[idx]}
+                    />
+                  )
                 ) : (
                   <Entypo name="camera" color="white" size={normalize(30)} />
                 )}
