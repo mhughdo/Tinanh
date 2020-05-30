@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import Header from '@shared/Header';
 import DefaultAvatar from '@images/default-avatar';
@@ -17,7 +17,7 @@ import { AppActionType } from '@reducers/appReducer';
 import ImagePicker from 'react-native-image-picker';
 import { uploadFileToFireBase } from '@utils/index';
 
-// TODO set imageURI for android
+// TODO add cloud function to reduce image size
 
 type ImagesType = {
   [key: number]: {
@@ -31,6 +31,36 @@ const ProfileScreen = () => {
   const { auth } = useAuth();
   const displayName = auth?.displayName || '';
   const { dispatch } = useAppState();
+
+  useEffect(() => {
+    function getImages() {
+      const firebaseImages: ImagesType = {};
+      function listFilesAndDirectories(reference: FirebaseStorageTypes.Reference, pageToken?: string): any {
+        return reference.list({ pageToken }).then(async (result) => {
+          // Loop over each item
+          for (const ref of result.items) {
+            const downloadURL = await ref.getDownloadURL();
+            const idx = Number(ref.name.split('-')[1]);
+            firebaseImages[idx] = { loading: false, uri: downloadURL };
+          }
+
+          if (result.nextPageToken) {
+            return listFilesAndDirectories(reference, result.nextPageToken);
+          }
+
+          return Promise.resolve();
+        });
+      }
+
+      const reference = storage().ref(`${auth?.id}`);
+
+      listFilesAndDirectories(reference).then(() => {
+        console.log('Finished listing');
+        setImages(firebaseImages);
+      });
+    }
+    getImages();
+  }, [auth]);
 
   const monitorFileUpload = (task: FirebaseStorageTypes.Task, idx: number) => {
     task.on(
@@ -60,7 +90,7 @@ const ProfileScreen = () => {
         console.log('An error occurred: ', response.error);
       } else {
         setImages({ ...images, [idx]: { uri: response.uri, loading: true } });
-        const task = uploadFileToFireBase(response, `${auth?.id}/${auth?.displayName}-${idx}`);
+        const task = uploadFileToFireBase(response, `${auth?.id}/${auth?.displayName.replace(/[\s\W]+/g, '')}-${idx}`);
         monitorFileUpload(task, idx);
       }
     });
