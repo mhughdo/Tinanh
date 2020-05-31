@@ -57,7 +57,7 @@ const Login = ({ navigation: { navigate } }) => {
             <Input
               style={{
                 paddingLeft: normalize(20),
-                fontSize: fontSize.xs,
+                fontSize: normalize(fontSize.xs),
               }}
               autoCapitalize="none"
               onChangeText={setEmail}
@@ -74,7 +74,7 @@ const Login = ({ navigation: { navigate } }) => {
             <Input
               style={{
                 paddingLeft: normalize(20),
-                fontSize: fontSize.xs,
+                fontSize: normalize(fontSize.xs),
               }}
               autoCapitalize="none"
               secureTextEntry={true}
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     paddingLeft: normalize(20),
   },
   logInHeader: {
-    fontSize: fontSize.xl,
+    fontSize: normalize(fontSize.xl),
     color: colors.mainThemeForegroundColor,
     fontWeight: '500',
   },
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   logInButton: {
     justifyContent: 'center',
-    fontSize: fontSize.base,
+    fontSize: normalize(fontSize.base),
     fontWeight: '500',
     backgroundColor: colors.mainThemeForegroundColor,
   },

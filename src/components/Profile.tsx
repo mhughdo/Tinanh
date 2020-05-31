@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   userName: {
     marginTop: normalize(10),
     textAlign: 'center',
-    fontSize: fontSize.lg,
+    fontSize: normalize(fontSize.lg),
     fontWeight: '500',
   },
   photosContainer: {

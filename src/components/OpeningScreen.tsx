@@ -47,12 +47,12 @@ const styles = StyleSheet.create({
   Heading: {
     textAlign: 'center',
     color: colors.mainThemeForegroundColor,
-    fontSize: fontSize.xxl,
+    fontSize: normalize(fontSize.xxl),
     fontWeight: '500',
   },
   subHeading: {
     marginTop: normalize(15),
-    fontSize: fontSize.base,
+    fontSize: normalize(fontSize.base),
     fontWeight: '500',
     textAlign: 'center',
   },
@@ -74,11 +74,11 @@ const styles = StyleSheet.create({
   },
   signUpText: {
     color: colors.mainThemeForegroundColor,
-    fontSize: fontSize.base,
+    fontSize: normalize(fontSize.base),
     fontWeight: '500',
   },
   logInText: {
-    fontSize: fontSize.base,
+    fontSize: normalize(fontSize.base),
     fontWeight: '500',
   },
 });

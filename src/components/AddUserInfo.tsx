@@ -115,7 +115,7 @@ const AddUserInfo = () => {
             <Input
               style={{
                 paddingLeft: normalize(20),
-                fontSize: fontSize.sm,
+                fontSize: normalize(fontSize.sm),
               }}
               autoCapitalize="none"
               onChangeText={setBio}
@@ -132,7 +132,7 @@ const AddUserInfo = () => {
             <Input
               style={{
                 paddingLeft: normalize(20),
-                fontSize: fontSize.sm,
+                fontSize: normalize(fontSize.sm),
               }}
               autoCapitalize="none"
               onChangeText={setSchool}
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     paddingLeft: normalize(20),
   },
   addInfoHeader: {
-    fontSize: fontSize.xl,
+    fontSize: normalize(fontSize.xl),
     color: colors.mainThemeForegroundColor,
     fontWeight: '500',
   },
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
   continueButton: {
     justifyContent: 'center',
-    fontSize: fontSize.base,
+    fontSize: normalize(fontSize.base),
     fontWeight: '500',
     backgroundColor: colors.mainThemeForegroundColor,
   },
