@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import Header from '@shared/Header';
 import DefaultAvatar from '@images/default-avatar';
@@ -15,9 +15,9 @@ import firebaseAuth from '@react-native-firebase/auth';
 import { useAppState } from '@store/appState';
 import { AppActionType } from '@reducers/appReducer';
 import ImagePicker from 'react-native-image-picker';
-import { uploadFileToFireBase } from '@utils/index';
+import { uploadFileToFireBase, getSmallerImage } from '@utils/index';
 
-// TODO add cloud function to reduce image size
+// TODO add cache
 
 type ImagesType = {
   [key: number]: {
@@ -26,8 +26,26 @@ type ImagesType = {
   };
 };
 
+type ImageActionsType =
+  | { type: 'ADD_IMAGE'; idx: number; loading: boolean; uri: string }
+  | { type: 'ADD_ALL_IMAGES'; images: ImagesType };
+
+const imageSize = 400;
+
+const imagesReducer = (state: ImagesType, action: ImageActionsType) => {
+  switch (action.type) {
+    case 'ADD_IMAGE':
+      return { ...state, [action.idx]: { loading: action.loading, uri: action.uri } };
+    case 'ADD_ALL_IMAGES':
+      return { ...state, ...action.images };
+    default:
+      throw new Error('Unknowen action');
+  }
+};
+
 const ProfileScreen = () => {
-  const [images, setImages] = useState<ImagesType>({});
+  // const [images, setImages] = useState<ImagesType>({});
+  const [images, imageDispatch] = useReducer(imagesReducer, {});
   const { auth } = useAuth();
   const displayName = auth?.displayName || '';
   const { dispatch } = useAppState();
@@ -39,9 +57,12 @@ const ProfileScreen = () => {
         return reference.list({ pageToken }).then(async (result) => {
           // Loop over each item
           for (const ref of result.items) {
-            const downloadURL = await ref.getDownloadURL();
-            const idx = Number(ref.name.split('-')[1]);
-            firebaseImages[idx] = { loading: false, uri: downloadURL };
+            const suffix = `_${imageSize}x${imageSize}`;
+            if (ref.name.includes(suffix)) {
+              const downloadURL = await ref.getDownloadURL();
+              const idx = Number(ref.name.replace(suffix, '').split('-')[1]);
+              firebaseImages[idx] = { loading: false, uri: downloadURL };
+            }
           }
 
           if (result.nextPageToken) {
@@ -55,8 +76,7 @@ const ProfileScreen = () => {
       const reference = storage().ref(`${auth?.id}`);
 
       listFilesAndDirectories(reference).then(() => {
-        console.log('Finished listing');
-        setImages(firebaseImages);
+        imageDispatch({ type: 'ADD_ALL_IMAGES', images: firebaseImages });
       });
     }
     getImages();
@@ -68,7 +88,14 @@ const ProfileScreen = () => {
       async (snapshot) => {
         if (snapshot.state === storage.TaskState.SUCCESS) {
           console.log('Image uploaded to the bucket');
-          setImages({ ...images, [idx]: { uri: await snapshot.ref.getDownloadURL(), loading: false } });
+          const imageName = snapshot.ref.name;
+          const updated = snapshot.metadata.updated;
+          const smallImageRef = storage().ref(`${auth?.id}/${imageName}_${imageSize}x${imageSize}`);
+          const smallURL = await getSmallerImage(5, updated, smallImageRef);
+          const uri = smallURL || (await snapshot.ref.getDownloadURL());
+          console.log(smallURL, imageName);
+          imageDispatch({ type: 'ADD_IMAGE', idx, uri, loading: false });
+          // setImages({ ...images, [idx]: { uri, loading: false } });
         }
       },
       () => {
@@ -89,7 +116,8 @@ const ProfileScreen = () => {
       } else if (response.error) {
         console.log('An error occurred: ', response.error);
       } else {
-        setImages({ ...images, [idx]: { uri: response.uri, loading: true } });
+        imageDispatch({ type: 'ADD_IMAGE', idx, uri: response.uri, loading: true });
+        // setImages({ ...images, [idx]: { uri: response.uri, loading: true } });
         const task = uploadFileToFireBase(response, `${auth?.id}/${auth?.displayName.replace(/[\s\W]+/g, '')}-${idx}`);
         monitorFileUpload(task, idx);
       }
@@ -190,6 +218,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     width: '23%',
+    overflow: 'hidden',
     backgroundColor: Colors.mainThemeForegroundColor,
   },
   settingsContainer: {
