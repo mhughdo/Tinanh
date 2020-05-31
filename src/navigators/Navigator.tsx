@@ -2,21 +2,38 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import HomeScreen from '../containers/HomeScreen/HomeScreen';
-import MessengerScreen from '../containers/MessengerScreen/MessengerScreen';
-import ProfileScreen from '../containers/ProfileScreen/ProfileScreen';
+import HomeScreen from '@containers/HomeScreen/HomeScreen';
+import MessengerScreen from '@containers/MessengerScreen/MessengerScreen';
+import SettingsScreen from '@containers/SettingsScreen/SettingsScreen';
+import AccountDetailsScreen from '@containers/AccountDetailsScreen/AccountDetailsScreen';
+import ProfileScreen from '@containers/ProfileScreen/ProfileScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
 const MessengerStack = createStackNavigator();
+
+const ProfileStackScreen = () => {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
+      <ProfileStack.Screen name="SettingsScreen" component={SettingsScreen} options={{ headerShown: false }} />
+      <ProfileStack.Screen
+        name="AccountDetailsScreen"
+        component={AccountDetailsScreen}
+        options={{ headerShown: false }}
+      />
+    </ProfileStack.Navigator>
+  );
+};
 
 const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
-      <HomeStack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
+      <HomeStack.Screen name="ProfileStackScreen" component={ProfileStackScreen} options={{ headerShown: false }} />
     </HomeStack.Navigator>
   );
 };

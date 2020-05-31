@@ -15,7 +15,7 @@ const Header = () => {
     <View>
       <GeneralStatusBarColor backgroundColor="white" />
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ProfileStackScreen')}>
           <Octicons
             color={route.name === 'ProfileScreen' ? colors.mainThemeForegroundColor : colors.grey9}
             name="person"
