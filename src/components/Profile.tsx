@@ -17,6 +17,9 @@ import ImagePicker from 'react-native-image-picker';
 import { uploadFileToFireBase, getSmallerImage } from '@utils/index';
 import { useNavigation } from '@react-navigation/native';
 
+const imageSize = 400;
+const imagesLength = 6;
+
 // TODO add cache
 type ImagesType = {
   [key: number]: {
@@ -25,15 +28,15 @@ type ImagesType = {
   };
 };
 
-const initialState = Array.from({ length: 6 }).reduce((acc: any, value, idx) => {
+const initialState = Array.from({ length: imagesLength }).reduce((acc: any, value, idx) => {
   return { ...acc, [idx]: { loading: true } };
 }, {}) as ImagesType;
 
 type ImageActionsType =
   | { type: 'ADD_IMAGE'; idx: number; loading: boolean; uri: string }
-  | { type: 'ADD_ALL_IMAGES'; images: ImagesType };
-
-const imageSize = 400;
+  | { type: 'ADD_ALL_IMAGES'; images: ImagesType }
+  | { type: 'ADD_ALL_IMAGES_START' }
+  | { type: 'ADD_ALL_IMAGES_END' };
 
 const imagesReducer = (state: ImagesType, action: ImageActionsType) => {
   switch (action.type) {
@@ -48,6 +51,7 @@ const imagesReducer = (state: ImagesType, action: ImageActionsType) => {
 
 const ProfileScreen = () => {
   const [images, imageDispatch] = useReducer(imagesReducer, initialState);
+  // console.log(images);
   const { auth } = useAuth();
   const displayName = auth?.displayName || '';
   const { dispatch } = useAppState();
@@ -55,7 +59,7 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     function getImages() {
-      const firebaseImages: ImagesType = {};
+      let firebaseImages: ImagesType = {};
       function listFilesAndDirectories(reference: FirebaseStorageTypes.Reference, pageToken?: string): any {
         return reference.list({ pageToken }).then(async (result) => {
           // Loop over each item
@@ -79,7 +83,16 @@ const ProfileScreen = () => {
       const reference = storage().ref(`${auth?.id}`);
 
       listFilesAndDirectories(reference).then(() => {
-        imageDispatch({ type: 'ADD_ALL_IMAGES', images: firebaseImages });
+        const loadedImages = {
+          ...firebaseImages,
+          ...(Array.from({ length: imagesLength }).reduce((acc: any, value, idx) => {
+            if (!firebaseImages[idx]) {
+              return { ...acc, [idx]: { loading: false } };
+            }
+            return { ...acc };
+          }, {}) as ImagesType),
+        };
+        imageDispatch({ type: 'ADD_ALL_IMAGES', images: loadedImages });
       });
     }
     getImages();
@@ -96,7 +109,6 @@ const ProfileScreen = () => {
           const smallImageRef = storage().ref(`${auth?.id}/${imageName}_${imageSize}x${imageSize}`);
           const smallURL = await getSmallerImage(5, updated, smallImageRef);
           const uri = smallURL || (await snapshot.ref.getDownloadURL());
-          console.log(smallURL, imageName);
           imageDispatch({ type: 'ADD_IMAGE', idx, uri, loading: false });
         }
       },
@@ -149,18 +161,17 @@ const ProfileScreen = () => {
 
             return (
               <TouchableOpacity onPress={() => uploadFile(idx)} style={styles.photo}>
-                {image ? (
-                  image.loading ? (
+                {image &&
+                  (image.loading ? (
                     <Spinner color="#ffffff" />
-                  ) : (
+                  ) : image.uri ? (
                     <Image
                       style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, resizeMode: 'cover' }}
                       source={image}
                     />
-                  )
-                ) : (
-                  <Entypo name="camera" color="white" size={normalize(30)} />
-                )}
+                  ) : (
+                    <Entypo name="camera" color="white" size={normalize(30)} />
+                  ))}
               </TouchableOpacity>
             );
           })}
