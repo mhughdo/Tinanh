@@ -154,13 +154,13 @@ const ProfileScreen = () => {
       </View>
       <Text style={styles.userName}>{displayName}</Text>
       <View style={styles.photosContainer}>
-        <Text style={{ fontSize: fontSize.base }}>My photos</Text>
+        <Text style={{ fontSize: normalize(fontSize.base) }}>My photos</Text>
         <View style={styles.photos}>
           {Array.from({ length: 6 }).map((_, idx) => {
             const image = images[idx];
 
             return (
-              <TouchableOpacity onPress={() => uploadFile(idx)} style={styles.photo}>
+              <TouchableOpacity key={idx} onPress={() => uploadFile(idx)} style={styles.photo}>
                 {image &&
                   (image.loading ? (
                     <Spinner color="#ffffff" />

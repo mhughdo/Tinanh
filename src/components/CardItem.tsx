@@ -14,6 +14,7 @@ const CardItem = ({ user }) => {
   useEffect(() => {
     return () => {
       console.log('unmounted');
+      navigation.navigate('MatchScreen');
     };
   }, []);
 
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   nameAgeText: {
     color: 'white',
     fontWeight: '600',
-    fontSize: fontSize.lg,
+    fontSize: normalize(fontSize.lg),
   },
   schoolTextContainer: {
     flexDirection: 'row',

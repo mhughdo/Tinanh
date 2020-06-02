@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   nameAgeText: {
     fontWeight: '600',
     color: Colors.mainTextColor,
-    fontSize: fontSize.xl,
+    fontSize: normalize(fontSize.xl),
   },
   schoolTextContainer: {
     flexDirection: 'row',
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   bioHeaderText: {
     marginLeft: normalize(10),
     fontWeight: '500',
-    fontSize: fontSize.sm,
+    fontSize: normalize(fontSize.sm),
   },
   iconContainer: {
     height: normalize(25),
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   interestedText: {
     marginLeft: normalize(10),
     fontWeight: '500',
-    fontSize: fontSize.sm,
+    fontSize: normalize(fontSize.sm),
   },
   interrestedListContainer: {
     marginTop: normalize(10),
@@ -261,6 +261,6 @@ const styles = StyleSheet.create({
   },
   interestedItemText: {
     marginLeft: normalize(10),
-    fontSize: fontSize.xs,
+    fontSize: normalize(fontSize.xs),
   },
 });

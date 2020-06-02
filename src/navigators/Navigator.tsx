@@ -7,11 +7,13 @@ import MessengerScreen from '@containers/MessengerScreen/MessengerScreen';
 import SettingsScreen from '@containers/SettingsScreen/SettingsScreen';
 import AccountDetailsScreen from '@containers/AccountDetailsScreen/AccountDetailsScreen';
 import ProfileScreen from '@containers/ProfileScreen/ProfileScreen';
+import MatchScreen from '@components/ItsAMatch';
 import UserDetailsScreen from '@components/UserDetails';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
+const RootStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const MessengerStack = createStackNavigator();
@@ -48,7 +50,7 @@ const MessengerStackScreen = () => {
   );
 };
 
-const Navigator = () => {
+const MainTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -67,6 +69,15 @@ const Navigator = () => {
       <Tab.Screen name="Home" component={HomeStackScreen} />
       <Tab.Screen name="Message" component={MessengerStackScreen} />
     </Tab.Navigator>
+  );
+};
+
+const Navigator = () => {
+  return (
+    <RootStack.Navigator mode="modal">
+      <RootStack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
+      <RootStack.Screen name="MatchScreen" component={MatchScreen} options={{ headerShown: false }} />
+    </RootStack.Navigator>
   );
 };
 

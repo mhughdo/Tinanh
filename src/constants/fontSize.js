@@ -5,4 +5,6 @@ export default {
   lg: 22,
   xl: 26,
   xxl: 30,
+  '3xl': 40,
+  '4xl': 50,
 };
