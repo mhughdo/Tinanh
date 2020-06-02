@@ -7,6 +7,7 @@ import MessengerScreen from '@containers/MessengerScreen/MessengerScreen';
 import SettingsScreen from '@containers/SettingsScreen/SettingsScreen';
 import AccountDetailsScreen from '@containers/AccountDetailsScreen/AccountDetailsScreen';
 import ProfileScreen from '@containers/ProfileScreen/ProfileScreen';
+import UserDetailsScreen from '@components/UserDetails';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -34,6 +35,7 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator>
       <HomeStack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
       <HomeStack.Screen name="ProfileStackScreen" component={ProfileStackScreen} options={{ headerShown: false }} />
+      <HomeStack.Screen name="UserDetailsScreen" component={UserDetailsScreen} options={{ headerShown: false }} />
     </HomeStack.Navigator>
   );
 };

@@ -59,7 +59,7 @@ const SignUp = ({ navigation: { navigate } }) => {
       .createUserWithEmailAndPassword(email, password)
       .then(async (data) => {
         const isNewUser = data.additionalUserInfo?.isNewUser;
-        const userSnapshot = await getSnapshotFromUserAuth(data.user, { isNewUser, displayName: name });
+        const userSnapshot = await getSnapshotFromUserAuth(data.user, { isNewUser, displayName: name.trim() });
         if (userSnapshot) {
           dispatch({ type: AppActionType.AUTH_CHANGE, auth: { id: userSnapshot.id, ...userSnapshot.data() } });
         }
