@@ -14,7 +14,7 @@ export default function useAuth() {
       if (!userSnapshot) {
         dispatch({ type: AppActionType.AUTH_CHANGE, auth: null });
         return null;
-      } else {
+      } else if (userSnapshot.data()) {
         dispatch({ type: AppActionType.AUTH_CHANGE, auth: { id: userSnapshot.id, ...userSnapshot.data() } });
       }
     }

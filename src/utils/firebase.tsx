@@ -1,15 +1,17 @@
 import firestore from '@react-native-firebase/firestore';
 
-export const createUserProfileDocument = async (userAuth, additionalData) => {
+export const db = firestore();
+
+export const createUserProfileDocument = async (userAuth, additionalData, createIfNotExisted) => {
   if (!userAuth) {
     return;
   }
 
-  const userRef = firestore().doc(`users/${userAuth.uid}`);
+  const userRef = db.doc(`users/${userAuth.uid}`);
 
   const snapShot = await userRef.get();
 
-  if (!snapShot.exists) {
+  if (!snapShot.exists && createIfNotExisted) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
     try {
@@ -29,8 +31,8 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   return userRef;
 };
 
-export const getSnapshotFromUserAuth = async (userAuth, additionalData) => {
-  const userRef = await createUserProfileDocument(userAuth, additionalData);
+export const getSnapshotFromUserAuth = async (userAuth, additionalData, createIfNotExisted = false) => {
+  const userRef = await createUserProfileDocument(userAuth, additionalData, createIfNotExisted);
   if (!userRef) {
     return null;
   }

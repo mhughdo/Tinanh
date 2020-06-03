@@ -9,6 +9,7 @@ import auth from '@react-native-firebase/auth';
 import { getSnapshotFromUserAuth } from '../utils/firebase';
 import { useAppState } from '../store/appState';
 import { AppActionType } from '../reducers/appReducer';
+import storage from '@react-native-firebase/storage';
 
 const isValidEmail = (email: string) => {
   let pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -23,7 +24,7 @@ const SignUp = ({ navigation: { navigate } }) => {
   const [name, setName] = useState('');
   const { dispatch } = useAppState();
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!email || !password || !confirmPassword || !name) {
       Toast.show({
         text: 'All fields are required!',
@@ -55,38 +56,43 @@ const SignUp = ({ navigation: { navigate } }) => {
     }
 
     setLoading(true);
-    auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(async (data) => {
-        const isNewUser = data.additionalUserInfo?.isNewUser;
-        const userSnapshot = await getSnapshotFromUserAuth(data.user, { isNewUser, displayName: name.trim() });
-        if (userSnapshot) {
-          dispatch({ type: AppActionType.AUTH_CHANGE, auth: { id: userSnapshot.id, ...userSnapshot.data() } });
-        }
 
-        setLoading(false);
-      })
-      .catch((error) => {
-        if (error.code === 'auth/email-already-in-use') {
-          Toast.show({
-            text: 'That email address is already in use!',
-            buttonText: 'Okay',
-            type: 'warning',
-            duration: 3000,
-          });
-        }
+    try {
+      const userData = await auth().createUserWithEmailAndPassword(email, password);
+      const isNewUser = userData.additionalUserInfo?.isNewUser;
+      const avatarURL = await storage().ref('unknown_400x400.jpg').getDownloadURL();
+      const additionalData = {
+        isNewUser,
+        avatarURL,
+        displayName: name.trim(),
+      };
+      const userSnapshot = await getSnapshotFromUserAuth(userData.user, additionalData, true);
+      if (userSnapshot) {
+        dispatch({ type: AppActionType.AUTH_CHANGE, auth: { id: userSnapshot.id, ...userSnapshot.data() } });
+      }
 
-        if (error.code === 'auth/invalid-email') {
-          Toast.show({
-            text: 'That email address is invalid!!',
-            buttonText: 'Okay',
-            type: 'warning',
-            duration: 3000,
-          });
-        }
-        setLoading(false);
-        console.error(error);
-      });
+      setLoading(false);
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        Toast.show({
+          text: 'That email address is already in use!',
+          buttonText: 'Okay',
+          type: 'warning',
+          duration: 3000,
+        });
+      }
+
+      if (error.code === 'auth/invalid-email') {
+        Toast.show({
+          text: 'That email address is invalid!!',
+          buttonText: 'Okay',
+          type: 'warning',
+          duration: 3000,
+        });
+      }
+      setLoading(false);
+      console.error(error);
+    }
   };
 
   return (
