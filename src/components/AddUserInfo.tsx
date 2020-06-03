@@ -11,6 +11,7 @@ import fontSize from '@constants/fontSize';
 import colors from '@constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import firestore from '@react-native-firebase/firestore';
+import { db } from '@utils/index';
 
 const AddUserInfo = () => {
   const { auth } = useAuth();
@@ -44,7 +45,7 @@ const AddUserInfo = () => {
     setLoading(true);
 
     if (auth) {
-      const userRef = firestore().doc(`users/${auth.id}`);
+      const userRef = db.doc(`users/${auth.id}`);
 
       const snapShot = await userRef.get();
 

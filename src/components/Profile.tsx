@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import DefaultAvatar from '@images/default-avatar';
 import normalize from 'react-native-normalize';
@@ -16,9 +16,11 @@ import { AppActionType } from '@reducers/appReducer';
 import ImagePicker from 'react-native-image-picker';
 import { uploadFileToFireBase, getSmallerImage } from '@utils/index';
 import { useNavigation } from '@react-navigation/native';
+import { db } from '@utils/index';
 
 const imageSize = 400;
 const imagesLength = 6;
+const unknownImg = require('../assets/images/unknown.jpg');
 
 // TODO add cache
 type ImagesType = {
@@ -49,53 +51,37 @@ const imagesReducer = (state: ImagesType, action: ImageActionsType) => {
   }
 };
 
+const getImageOrder = (fileName: string) => {
+  return fileName.split('-')[1];
+};
+
 const ProfileScreen = () => {
   const [images, imageDispatch] = useReducer(imagesReducer, initialState);
-  // console.log(images);
   const { auth } = useAuth();
+  const [avatar, setAvatar] = useState(auth?.avatarURL ? { uri: auth.avatarURL } : unknownImg);
+  // console.log(images);
   const displayName = auth?.displayName || '';
   const { dispatch } = useAppState();
   const navigation = useNavigation();
-
   useEffect(() => {
-    function getImages() {
-      let firebaseImages: ImagesType = {};
-      function listFilesAndDirectories(reference: FirebaseStorageTypes.Reference, pageToken?: string): any {
-        return reference.list({ pageToken }).then(async (result) => {
-          // Loop over each item
-          for (const ref of result.items) {
-            const suffix = `_${imageSize}x${imageSize}`;
-            if (ref.name.includes(suffix)) {
-              const downloadURL = await ref.getDownloadURL();
-              const idx = Number(ref.name.replace(suffix, '').split('-')[1]);
-              firebaseImages[idx] = { loading: false, uri: downloadURL };
-            }
-          }
+    const getUserImages = async () => {
+      const firebaseImages: ImagesType = {};
+      const userData = (await db.doc(`users/${auth?.id}`).get()).data();
+      const photos = userData?.photos || [];
+      Array.from({ length: imagesLength }).forEach((_, idx) => {
+        const photo = photos[idx] || {};
+        const { thumbnail, uri } = photo;
 
-          if (result.nextPageToken) {
-            return listFilesAndDirectories(reference, result.nextPageToken);
-          }
-
-          return Promise.resolve();
-        });
-      }
-
-      const reference = storage().ref(`${auth?.id}`);
-
-      listFilesAndDirectories(reference).then(() => {
-        const loadedImages = {
-          ...firebaseImages,
-          ...(Array.from({ length: imagesLength }).reduce((acc: any, value, idx) => {
-            if (!firebaseImages[idx]) {
-              return { ...acc, [idx]: { loading: false } };
-            }
-            return { ...acc };
-          }, {}) as ImagesType),
+        firebaseImages[idx] = {
+          uri: thumbnail || uri,
+          loading: false,
         };
-        imageDispatch({ type: 'ADD_ALL_IMAGES', images: loadedImages });
       });
-    }
-    getImages();
+      imageDispatch({ type: 'ADD_ALL_IMAGES', images: firebaseImages });
+    };
+
+    getUserImages();
+    // getImages();
   }, [auth]);
 
   const monitorFileUpload = (task: FirebaseStorageTypes.Task, idx: number) => {
@@ -108,7 +94,36 @@ const ProfileScreen = () => {
           const updated = snapshot.metadata.updated;
           const smallImageRef = storage().ref(`${auth?.id}/${imageName}_${imageSize}x${imageSize}`);
           const smallURL = await getSmallerImage(5, updated, smallImageRef);
-          const uri = smallURL || (await snapshot.ref.getDownloadURL());
+          const bigURL = await snapshot.ref.getDownloadURL();
+          const uri = smallURL || bigURL;
+          const userRef = db.collection('users').doc(`${auth?.id}`);
+          const userData = (await userRef.get()).data();
+          delete userData?.photos?.unknown;
+          const photos = {
+            ...userData?.photos,
+            [getImageOrder(imageName)]: {
+              thumbnail: smallURL,
+              uri: bigURL,
+            },
+          };
+          const avatarURL =
+            photos[
+              Object.keys(photos).find((key) => {
+                return photos[key];
+              }) || -1
+            ]?.thumbnail;
+
+          const shouldUpdateAvatar = avatarURL !== userData?.avatarURL;
+
+          if (typeof avatarURL === 'string' && shouldUpdateAvatar) {
+            dispatch({ type: AppActionType.AUTH_CHANGE, auth: { ...auth, avatarURL } });
+            setAvatar({ uri: avatarURL });
+          }
+
+          userRef.update({
+            photos,
+            ...(shouldUpdateAvatar && { avatarURL }),
+          });
           imageDispatch({ type: 'ADD_IMAGE', idx, uri, loading: false });
         }
       },
@@ -142,7 +157,7 @@ const ProfileScreen = () => {
       dispatch({ type: AppActionType.AUTH_CHANGE, auth: null });
       firebaseAuth()
         .signOut()
-        .then(() => console.log('User signed out!'))
+        // .then(() => console.log('User signed out!'))
         .catch((error) => console.log('Error logging out', error));
     }
   };
@@ -150,7 +165,8 @@ const ProfileScreen = () => {
   return (
     <View style={styles.profileContainer}>
       <View style={styles.avatarContainer}>
-        <DefaultAvatar height={normalize(150)} width={normalize(150)} />
+        <Image style={styles.avatar} source={avatar} />
+        {/* <DefaultAvatar height={normalize(150)} width={normalize(150)} /> */}
       </View>
       <Text style={styles.userName}>{displayName}</Text>
       <View style={styles.photosContainer}>
@@ -204,7 +220,20 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     alignItems: 'center',
-    paddingTop: normalize(20),
+    alignSelf: 'center',
+    borderRadius: normalize(150 / 2),
+    overflow: 'hidden',
+    backgroundColor: Colors.mainThemeForegroundColor,
+    marginTop: normalize(20),
+    height: normalize(150),
+    width: normalize(150),
+  },
+  avatar: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
   },
   userName: {
     marginTop: normalize(10),

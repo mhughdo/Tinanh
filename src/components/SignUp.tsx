@@ -61,10 +61,17 @@ const SignUp = ({ navigation: { navigate } }) => {
       const userData = await auth().createUserWithEmailAndPassword(email, password);
       const isNewUser = userData.additionalUserInfo?.isNewUser;
       const avatarURL = await storage().ref('unknown_400x400.jpg').getDownloadURL();
+      const unknownImageURL = await storage().ref('unknown.jpg').getDownloadURL();
       const additionalData = {
         isNewUser,
         avatarURL,
         displayName: name.trim(),
+        photos: {
+          unknown: {
+            thumbnail: avatarURL,
+            uri: unknownImageURL,
+          },
+        },
       };
       const userSnapshot = await getSnapshotFromUserAuth(userData.user, additionalData, true);
       if (userSnapshot) {

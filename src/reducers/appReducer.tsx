@@ -1,7 +1,8 @@
-type userType = {
+export type userType = {
   id: string;
   displayName: string;
   email: string;
+  avatarURL: string;
   photos: string[];
   liked: string[];
   isLiked: string[];

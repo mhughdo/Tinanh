@@ -66,7 +66,6 @@ const requesrPermission = async () => {
 
 function App() {
   const { auth, isInitializing } = useAuth();
-
   // useEffect(() => {
   //   firebaseAuth()
   //     .signOut()

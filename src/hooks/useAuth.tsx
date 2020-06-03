@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useAppState } from '../store/appState';
 import firebaseAuth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { AppActionType } from '@reducers/appReducer';
-import { getSnapshotFromUserAuth } from '@utils/firebase';
+import { getSnapshotFromUserAuth, calculateAge } from '@utils/index';
 
 export default function useAuth() {
   const { state, dispatch } = useAppState();
@@ -15,7 +15,10 @@ export default function useAuth() {
         dispatch({ type: AppActionType.AUTH_CHANGE, auth: null });
         return null;
       } else if (userSnapshot.data()) {
-        dispatch({ type: AppActionType.AUTH_CHANGE, auth: { id: userSnapshot.id, ...userSnapshot.data() } });
+        dispatch({
+          type: AppActionType.AUTH_CHANGE,
+          auth: { id: userSnapshot.id, ...userSnapshot.data(), age: calculateAge(userSnapshot.data().dob.toDate()) },
+        });
       }
     }
     const subscriber = firebaseAuth().onAuthStateChanged(onAuthStateChanged);

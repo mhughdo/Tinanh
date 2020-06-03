@@ -53,3 +53,11 @@ export async function getSmallerImage(
     }
   }
 }
+
+export const calculateAge = (dob) => {
+  const converted = new Date(dob);
+  const userYear = converted.getFullYear();
+  const thisYear = new Date().getFullYear();
+
+  return thisYear - userYear;
+};

@@ -1,17 +1,32 @@
-import React, { useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Text } from 'native-base';
 import normalize from 'react-native-normalize';
 import colors from '@constants/Colors';
 import CardStack, { Card } from 'react-native-card-stack-swiper';
 import CardItem from '@components/CardItem';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Header from '@shared/Header';
-import users from '../data/users';
+// import fakeUsers from '../data/users';
+import { db } from '@utils/index';
+import useAuth from '@hooks/useAuth';
+import { userType } from '@reducers/appReducer';
 
 const Home = () => {
   // const swiper = useRef<CardStack | null>();
   const [swiper, setSwiper] = useState<CardStack | null>();
+  const [users, setUsers] = useState<Partial<userType>[]>([]);
+  const { auth } = useAuth();
+
+  useEffect(() => {
+    const getAllUsers = async () => {
+      const users = (await db.collection('users').get()).docs
+        .filter((user) => user.data().email !== auth?.email)
+        .map((user) => user.data());
+      setUsers(users);
+    };
+
+    getAllUsers();
+  }, []);
 
   return (
     <View style={styles.homeContaier}>
@@ -22,16 +37,19 @@ const Home = () => {
           disableBottomSwipe
           secondCardZoom={1}
           renderNoMoreCards={() => null}
+          // onSwiped={(index) => console.log(index)}
+          onSwipedRight={(index) => console.log(index)}
           ref={(cardSwiper) => {
             setSwiper(cardSwiper);
           }}>
-          {users.map((user, index) => {
-            return (
-              <Card style={styles.cardContainer}>
-                <CardItem key={index} user={user} />
-              </Card>
-            );
-          })}
+          {users.length &&
+            users.map((user, index) => {
+              return (
+                <Card style={styles.cardContainer}>
+                  <CardItem key={index} user={user} />
+                </Card>
+              );
+            })}
         </CardStack>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity onPress={() => swiper?.swipeLeft()} style={[styles.circle]}>
