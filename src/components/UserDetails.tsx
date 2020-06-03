@@ -8,34 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '@constants/Colors';
-
-const carouselItems = [
-  {
-    title: 'Item 1',
-    text: 'Text 1',
-    image: require('../assets/images/profile_images/1.png'),
-  },
-  {
-    title: 'Item 2',
-    text: 'Text 2',
-    image: require('../assets/images/profile_images/2.png'),
-  },
-  {
-    title: 'Item 3',
-    text: 'Text 3',
-    image: require('../assets/images/profile_images/3.png'),
-  },
-  {
-    title: 'Item 4',
-    text: 'Text 4',
-    image: require('../assets/images/profile_images/4.png'),
-  },
-  {
-    title: 'Item 5',
-    text: 'Text 5',
-    image: require('../assets/images/profile_images/5.png'),
-  },
-];
+import { calculateAge } from '@utils';
 
 const interested = [
   {
@@ -65,11 +38,12 @@ const UserDetails = () => {
   const [carouselRef, setCarouselRef] = useState();
   const route = useRoute();
   const { user } = route.params;
+  const photos = Object.keys(user.photos).map((key) => ({ uri: user.photos[key].uri }));
 
   const renderItem = ({ item, index }) => {
     return (
       <View style={styles.itemContainer}>
-        <Image style={styles.itemImgContainer} source={item.image} />
+        <Image style={styles.itemImgContainer} source={{ uri: item.uri }} />
       </View>
     );
   };
@@ -82,7 +56,7 @@ const UserDetails = () => {
           <Carousel
             layout={'tinder'}
             ref={(ref) => setCarouselRef(ref)}
-            data={carouselItems}
+            data={photos}
             sliderWidth={normalize(400)}
             itemWidth={normalize(400)}
             renderItem={renderItem}
@@ -93,7 +67,7 @@ const UserDetails = () => {
         </View>
         <View style={styles.paginationContainer}>
           <Pagination
-            dotsLength={carouselItems.length}
+            dotsLength={photos.length}
             activeDotIndex={activeIndex}
             containerStyle={{}}
             dotStyle={styles.dotStyle}
@@ -108,7 +82,7 @@ const UserDetails = () => {
         </View>
         <View style={styles.userInfoContainer}>
           <Text style={styles.nameAgeText}>
-            {user.displayName}, {user.age}
+            {user.displayName}, {calculateAge(user.dob.toDate())}
           </Text>
           <View style={styles.schoolTextContainer}>
             <Ionicons name="md-school" size={normalize(16)} color={Colors.mainSubtextColor} />
