@@ -43,7 +43,7 @@ function SplashScreen() {
 
 const Stack = createStackNavigator();
 
-const requesrPermission = async () => {
+const requestPermission = async () => {
   if (Platform.OS !== 'android') {
     Geolocation.requestAuthorization();
   } else {

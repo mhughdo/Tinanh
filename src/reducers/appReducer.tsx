@@ -5,6 +5,7 @@ export type userType = {
   avatarURL: string;
   photos: string[];
   liked: string[];
+  disliked: string[];
   isLiked: string[];
   matches: string[];
   settings: {

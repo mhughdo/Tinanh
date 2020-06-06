@@ -1,6 +1,5 @@
 import React, { useReducer, useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
-import DefaultAvatar from '@images/default-avatar';
 import normalize from 'react-native-normalize';
 import useAuth from '@hooks/useAuth';
 import fontSize from '@constants/fontSize';
@@ -18,7 +17,8 @@ import { uploadFileToFireBase, getSmallerImage } from '@utils/index';
 import { useNavigation } from '@react-navigation/native';
 import { db } from '@utils/index';
 
-const imageSize = 400;
+const mediumImageSize = 400;
+const smallImageSize = 50;
 const imagesLength = 6;
 const unknownImg = require('../assets/images/unknown.jpg');
 
@@ -37,13 +37,15 @@ const initialState = Array.from({ length: imagesLength }).reduce((acc: any, valu
 type ImageActionsType =
   | { type: 'ADD_IMAGE'; idx: number; loading: boolean; uri: string }
   | { type: 'ADD_ALL_IMAGES'; images: ImagesType }
-  | { type: 'ADD_ALL_IMAGES_START' }
-  | { type: 'ADD_ALL_IMAGES_END' };
+  | { type: 'LOAD_IMAGE_SUCCESS'; idx: number };
 
 const imagesReducer = (state: ImagesType, action: ImageActionsType) => {
   switch (action.type) {
     case 'ADD_IMAGE':
       return { ...state, [action.idx]: { loading: action.loading, uri: action.uri } };
+    case 'LOAD_IMAGE_SUCCESS': {
+      return { ...state, [action.idx]: { ...state[action.idx], loading: false } };
+    }
     case 'ADD_ALL_IMAGES':
       return { ...state, ...action.images };
     default:
@@ -53,6 +55,11 @@ const imagesReducer = (state: ImagesType, action: ImageActionsType) => {
 
 const getImageOrder = (fileName: string) => {
   return fileName.split('-')[1];
+};
+
+const getImageUrl = async (imageName: string, imageSize: number, auth: any, updated: string) => {
+  const imageRef = storage().ref(`${auth?.id}/${imageName}_${imageSize}x${imageSize}`);
+  return await getSmallerImage(5, updated, imageRef);
 };
 
 const ProfileScreen = () => {
@@ -70,11 +77,11 @@ const ProfileScreen = () => {
       const photos = userData?.photos || [];
       Array.from({ length: imagesLength }).forEach((_, idx) => {
         const photo = photos[idx] || {};
-        const { thumbnail, uri } = photo;
+        const { medium, thumbnail, uri } = photo;
 
         firebaseImages[idx] = {
-          uri: thumbnail || uri,
-          loading: false,
+          uri: medium || thumbnail || uri,
+          loading: true,
         };
       });
       imageDispatch({ type: 'ADD_ALL_IMAGES', images: firebaseImages });
@@ -92,10 +99,10 @@ const ProfileScreen = () => {
           console.log('Image uploaded to the bucket');
           const imageName = snapshot.ref.name;
           const updated = snapshot.metadata.updated;
-          const smallImageRef = storage().ref(`${auth?.id}/${imageName}_${imageSize}x${imageSize}`);
-          const smallURL = await getSmallerImage(5, updated, smallImageRef);
+          const mediumURL = await getImageUrl(imageName, mediumImageSize, auth, updated);
+          const smallURL = await getImageUrl(imageName, smallImageSize, auth, updated);
           const bigURL = await snapshot.ref.getDownloadURL();
-          const uri = smallURL || bigURL;
+          const uri = mediumURL || bigURL;
           const userRef = db.collection('users').doc(`${auth?.id}`);
           const userData = (await userRef.get()).data();
           delete userData?.photos?.unknown;
@@ -103,6 +110,7 @@ const ProfileScreen = () => {
             ...userData?.photos,
             [getImageOrder(imageName)]: {
               thumbnail: smallURL,
+              medium: mediumURL,
               uri: bigURL,
             },
           };
@@ -111,7 +119,7 @@ const ProfileScreen = () => {
               Object.keys(photos).find((key) => {
                 return photos[key];
               }) || -1
-            ]?.thumbnail;
+            ]?.medium;
 
           const shouldUpdateAvatar = avatarURL !== userData?.avatarURL;
 
@@ -177,17 +185,18 @@ const ProfileScreen = () => {
 
             return (
               <TouchableOpacity key={idx} onPress={() => uploadFile(idx)} style={styles.photo}>
-                {image &&
-                  (image.loading ? (
-                    <Spinner color="#ffffff" />
-                  ) : image.uri ? (
+                {image && image.uri ? (
+                  <>
+                    {image.loading && <Spinner color="#ffffff" />}
                     <Image
                       style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, resizeMode: 'cover' }}
+                      onLoad={() => imageDispatch({ type: 'LOAD_IMAGE_SUCCESS', idx })}
                       source={image}
                     />
-                  ) : (
-                    <Entypo name="camera" color="white" size={normalize(30)} />
-                  ))}
+                  </>
+                ) : (
+                  <Entypo name="camera" color="white" size={normalize(30)} />
+                )}
               </TouchableOpacity>
             );
           })}

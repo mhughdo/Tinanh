@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import normalize from 'react-native-normalize';
 import colors from '@constants/Colors';
 import CardStack, { Card } from 'react-native-card-stack-swiper';
@@ -36,20 +36,19 @@ const Home = () => {
           style={styles.cardStackContainer}
           disableBottomSwipe
           secondCardZoom={1}
-          renderNoMoreCards={() => null}
+          renderNoMoreCards={users.length === 0 ? () => <Text>No more cards</Text> : () => null}
           // onSwiped={(index) => console.log(index)}
           onSwipedRight={(index) => console.log(index)}
           ref={(cardSwiper) => {
             setSwiper(cardSwiper);
           }}>
-          {users.length &&
-            users.map((user, index) => {
-              return (
-                <Card style={styles.cardContainer}>
-                  <CardItem key={index} user={user} />
-                </Card>
-              );
-            })}
+          {users.map((user, index) => {
+            return (
+              <Card style={styles.cardContainer}>
+                <CardItem key={index} user={user} />
+              </Card>
+            );
+          })}
         </CardStack>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity onPress={() => swiper?.swipeLeft()} style={[styles.circle]}>

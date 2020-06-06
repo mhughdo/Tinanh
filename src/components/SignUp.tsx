@@ -68,7 +68,7 @@ const SignUp = ({ navigation: { navigate } }) => {
         displayName: name.trim(),
         photos: {
           unknown: {
-            thumbnail: avatarURL,
+            medium: avatarURL,
             uri: unknownImageURL,
           },
         },

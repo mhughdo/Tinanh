@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Dimensions, Image, TouchableWithoutFeedback } from 'react-native';
 import normalize from 'react-native-normalize';
 import { Text } from 'native-base';
@@ -8,10 +8,20 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { calculateAge } from '@utils';
+import ProgressiveImage from '@components/ProgressiveImage';
+import Colors from '@constants/Colors';
 
 const CardItem = ({ user }) => {
   const navigation = useNavigation();
-  const heroImage = user.photos['0'] && user?.photos['0'].uri;
+
+  const heroImage =
+    user.photos[
+      Object.keys(user.photos).find((key) => {
+        return user.photos[key];
+      }) || -1
+    ];
+  const heroImageURI = heroImage?.uri || require('../assets/images/unknown.png');
+  const thumbnailHeroImageURI = heroImage?.thumbnail;
   // const img = require();
 
   useEffect(() => {
@@ -26,7 +36,11 @@ const CardItem = ({ user }) => {
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate('UserDetailsScreen', { user })}
         style={styles.imgContainer}>
-        <Image style={styles.img} source={{ uri: heroImage }} />
+        <ProgressiveImage
+          style={styles.img}
+          thumbnailSource={{ uri: thumbnailHeroImageURI }}
+          source={{ uri: heroImageURI }}
+        />
       </TouchableWithoutFeedback>
 
       <View style={styles.bodyContainer}>
@@ -73,7 +87,8 @@ const styles = StyleSheet.create({
     marginHorizontal: normalize(15),
     borderRadius: normalize(15),
     width: Dimensions.get('window').width - normalize(30),
-    height: Dimensions.get('window').height - normalize(250),
+    height: Dimensions.get('window').height - normalize(200, 'height'),
+    backgroundColor: Colors.hairlineColor,
     // backgroundColor: colors.mainThemeForegroundColor,
     // justifyContent: 'center',
     alignItems: 'center',

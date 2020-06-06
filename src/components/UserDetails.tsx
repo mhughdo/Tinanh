@@ -9,6 +9,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '@constants/Colors';
 import { calculateAge } from '@utils';
+import ProgressiveImage from './ProgressiveImage';
 
 const interested = [
   {
@@ -38,12 +39,19 @@ const UserDetails = () => {
   const [carouselRef, setCarouselRef] = useState();
   const route = useRoute();
   const { user } = route.params;
-  const photos = Object.keys(user.photos).map((key) => ({ uri: user.photos[key].uri }));
+  const photos = Object.keys(user.photos).map((key) => ({
+    uri: user.photos[key].uri,
+    thumbnail: user.photos[key].thumbnail,
+  }));
 
   const renderItem = ({ item, index }) => {
     return (
       <View style={styles.itemContainer}>
-        <Image style={styles.itemImgContainer} source={{ uri: item.uri }} />
+        <ProgressiveImage
+          style={styles.itemImgContainer}
+          thumbnailSource={{ uri: item.thumbnail }}
+          source={{ uri: item.uri }}
+        />
       </View>
     );
   };
@@ -144,7 +152,7 @@ const styles = StyleSheet.create({
   },
   paginationContainer: {
     position: 'absolute',
-    top: normalize(410),
+    top: normalize(340, 'height'),
     left: normalize(80),
   },
   dotStyle: {
@@ -166,7 +174,7 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     position: 'absolute',
     paddingHorizontal: normalize(20),
-    top: normalize(460),
+    top: normalize(390, 'height'),
   },
   nameAgeText: {
     fontWeight: '600',
