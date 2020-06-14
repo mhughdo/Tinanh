@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Platform, PermissionsAndroid } from 'react-native';
 import { Root } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
@@ -13,8 +13,7 @@ import Logo from '@images/Logo';
 import useAuth from './hooks/useAuth';
 import AddUserInfoScreen from '@components/AddUserInfo';
 import Geolocation from 'react-native-geolocation-service';
-import firebaseAuth from '@react-native-firebase/auth';
-import functions, { firebase } from '@react-native-firebase/functions';
+import functions from '@react-native-firebase/functions';
 
 // Use a local emulator in development
 if (__DEV__) {

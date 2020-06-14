@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, Image, TouchableWithoutFeedback } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import normalize from 'react-native-normalize';
 import { Text } from 'native-base';
 import fontSize from '@constants/fontSize';
@@ -14,12 +14,14 @@ import Colors from '@constants/Colors';
 const CardItem = ({ user }) => {
   const navigation = useNavigation();
 
-  const heroImage =
-    user.photos[
-      Object.keys(user.photos).find((key) => {
-        return user.photos[key];
-      }) || -1
-    ];
+  const heroImage = user?.photos
+    ? user?.photos[
+        Object.keys(user?.photos).find((key) => {
+          return user?.photos[key];
+        }) || -1
+      ]
+    : {};
+
   const heroImageURI = heroImage?.uri || require('../assets/images/unknown.png');
   const thumbnailHeroImageURI = heroImage?.thumbnail;
   // const img = require();
@@ -53,7 +55,7 @@ const CardItem = ({ user }) => {
 
         <View style={styles.infoContainer}>
           <Text style={styles.nameAgeText}>
-            {user.displayName}, {calculateAge(user.dob.toDate())}
+            {user.displayName}, {calculateAge(user?.dob.toDate())}
           </Text>
           <View style={styles.schoolTextContainer}>
             <Ionicons name="md-school" color="#ffffff" size={16} />

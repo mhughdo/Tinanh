@@ -15,9 +15,10 @@ export default function useAuth() {
         dispatch({ type: AppActionType.AUTH_CHANGE, auth: null });
         return null;
       } else if (userSnapshot.data()) {
+        const age = userSnapshot.data()?.dob ? calculateAge(userSnapshot.data().dob.toDate()) : null;
         dispatch({
           type: AppActionType.AUTH_CHANGE,
-          auth: { id: userSnapshot.id, ...userSnapshot.data(), age: calculateAge(userSnapshot.data().dob.toDate()) },
+          auth: { id: userSnapshot.id, ...userSnapshot.data(), age: age },
         });
       }
     }

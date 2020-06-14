@@ -1,17 +1,28 @@
 import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, View } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button, Text } from 'native-base';
 import fontSize from '@constants/fontSize';
 import normalize from 'react-native-normalize';
 import Colors from '@constants/Colors';
+import ProgressiveImage from './ProgressiveImage';
 
 const ItsAMatch = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { user } = route.params;
+  const image =
+    user.photos[
+      Object.keys(user.photos).find((key) => {
+        return user.photos[key];
+      }) || -1
+    ];
+  const imageURI = image?.uri || require('../assets/images/unknown.png');
+  const thumbnailImageURI = image?.thumbnail || require('../assets/images/unknown.png');
 
   return (
     <View>
-      <Image style={styles.image} source={require('../assets/images/profile_images/13.png')} />
+      <ProgressiveImage style={styles.image} thumbnailSource={{ uri: thumbnailImageURI }} source={{ uri: imageURI }} />
       <View style={styles.actionsContainer}>
         <Text style={styles.matchText}>It's a match</Text>
         <Button style={styles.sendMessageButton}>

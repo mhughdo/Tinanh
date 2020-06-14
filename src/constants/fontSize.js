@@ -1,4 +1,5 @@
 export default {
+  xxs: 12,
   xs: 14,
   sm: 16,
   base: 18,

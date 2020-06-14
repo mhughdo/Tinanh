@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, StatusBar, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, StatusBar, ScrollView, TouchableOpacity } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import normalize from 'react-native-normalize';
@@ -32,9 +32,14 @@ const interested = [
     title: 'Romantic',
     color: '#ED64A6',
   },
+  {
+    name: 'ios-camera',
+    title: 'Photography',
+    color: '#4FD1C5',
+  },
 ];
 
-const UserDetails = () => {
+const UserDetails: React.FC<{ swipable?: boolean }> = ({ swipable = false }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [carouselRef, setCarouselRef] = useState();
   const route = useRoute();
@@ -59,7 +64,7 @@ const UserDetails = () => {
   return (
     <>
       <StatusBar hidden />
-      <ScrollView style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={styles.carouselContainer}>
           <Carousel
             layout={'tinder'}
@@ -88,6 +93,20 @@ const UserDetails = () => {
             inactiveDotScale={0.6}
           />
         </View>
+        {swipable && (
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity style={styles.circle}>
+              <Ionicons name="ios-heart" size={normalize(20)} color={Colors.onlineMarkColor} />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.circle]}>
+              <Ionicons name="md-close" size={normalize(20)} color={Colors.mainThemeForegroundColor} />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.circle]}>
+              <Ionicons name="ios-star" size={normalize(20)} color={Colors.blue} />
+            </TouchableOpacity>
+          </View>
+        )}
+
         <View style={styles.userInfoContainer}>
           <Text style={styles.nameAgeText}>
             {user.displayName}, {calculateAge(user.dob.toDate())}
@@ -107,7 +126,7 @@ const UserDetails = () => {
               </View>
               <Text style={styles.bioHeaderText}>About</Text>
             </View>
-            <Text style={styles.bioText}>This is a bio</Text>
+            <Text style={styles.bioText}>This is a bio This is a bio This is a bio This is a bio</Text>
           </View>
           <View style={styles.interestedContainer}>
             <View style={styles.interestedHeaderContainer}>
@@ -174,6 +193,26 @@ const styles = StyleSheet.create({
     // marginHorizontal: normalize(25),
   },
   itemImgContainer: { resizeMode: 'cover', width: '100%', height: '100%' },
+  buttonsContainer: {
+    flexDirection: 'column',
+    // width: '100%',
+    paddingHorizontal: normalize(20),
+    // borderWidth: 2,
+    position: 'absolute',
+    top: normalize(380, 'height'),
+    right: 0,
+    // justifyContent: 'space-between',
+  },
+  circle: {
+    width: normalize(35),
+    height: normalize(35),
+    borderRadius: normalize(35 / 2),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    marginBottom: normalize(5),
+    // padding: normalize(10),
+  },
   userInfoContainer: {
     position: 'absolute',
     paddingHorizontal: normalize(20),
@@ -191,6 +230,7 @@ const styles = StyleSheet.create({
   schoolText: {
     marginLeft: normalize(10),
     color: Colors.mainSubtextColor,
+    fontSize: normalize(fontSize.xs),
   },
   distanceTextContainer: {
     flexDirection: 'row',
@@ -198,6 +238,7 @@ const styles = StyleSheet.create({
   distanceText: {
     marginLeft: normalize(10),
     color: Colors.mainSubtextColor,
+    fontSize: normalize(fontSize.xs),
   },
   bioContainer: {
     marginTop: normalize(10),
@@ -209,7 +250,7 @@ const styles = StyleSheet.create({
   bioHeaderText: {
     marginLeft: normalize(10),
     fontWeight: '500',
-    fontSize: normalize(fontSize.sm),
+    fontSize: normalize(fontSize.xs),
   },
   iconContainer: {
     height: normalize(25),
@@ -220,8 +261,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#E53E3E',
   },
   bioText: {
-    marginTop: normalize(10),
-    color: Colors.mainSubtextColor,
+    marginTop: normalize(15),
+    color: Colors.mainTextColor,
+    fontSize: normalize(fontSize.xs),
   },
   interestedContainer: {
     marginTop: normalize(10),
@@ -233,10 +275,10 @@ const styles = StyleSheet.create({
   interestedText: {
     marginLeft: normalize(10),
     fontWeight: '500',
-    fontSize: normalize(fontSize.sm),
+    fontSize: normalize(fontSize.xs),
   },
   interrestedListContainer: {
-    marginTop: normalize(10),
+    marginTop: normalize(15),
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
