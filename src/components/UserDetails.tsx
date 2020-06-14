@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, StatusBar, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import normalize from 'react-native-normalize';
@@ -59,7 +59,7 @@ const UserDetails = () => {
   return (
     <>
       <StatusBar hidden />
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.carouselContainer}>
           <Carousel
             layout={'tinder'}
@@ -134,7 +134,7 @@ const UserDetails = () => {
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -144,11 +144,14 @@ export default UserDetails;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // borderWidth: 2,
   },
   carouselContainer: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
+    // justifyContent: 'center',
+    // flexDirection: 'row',
   },
   paginationContainer: {
     position: 'absolute',
