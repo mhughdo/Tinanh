@@ -7,26 +7,56 @@ import CardItem from '@components/CardItem';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Header from '@shared/Header';
 // import fakeUsers from '../data/users';
-import { db } from '@utils/index';
 import useAuth from '@hooks/useAuth';
 import { userType } from '@reducers/appReducer';
+import functions, { firebase } from '@react-native-firebase/functions';
+import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
   // const swiper = useRef<CardStack | null>();
   const [swiper, setSwiper] = useState<CardStack | null>();
   const [users, setUsers] = useState<Partial<userType>[]>([]);
-  const { auth } = useAuth();
+  const navigation = useNavigation();
 
   useEffect(() => {
     const getAllUsers = async () => {
-      const users = (await db.collection('users').get()).docs
-        .filter((user) => user.data().email !== auth?.email)
-        .map((user) => user.data());
-      setUsers(users);
+      try {
+        const { data: users } = await functions().httpsCallable('getUsers')();
+        const transformed = users.map((user) => ({
+          ...user,
+          dob: new firebase.firestore.Timestamp(user.dob._seconds, user.dob._nanoseconds),
+        }));
+
+        setUsers(transformed);
+      } catch (error) {
+        console.log(error.message);
+      }
     };
 
     getAllUsers();
   }, []);
+
+  const handleSwipeRight = async (idx: number) => {
+    try {
+      const {
+        data: { matches, user },
+      } = await functions().httpsCallable('swipedRight')({ id: users[idx].id });
+      if (matches) {
+        navigation.navigate('MatchScreen', { user });
+      }
+      //     console.log(data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleSwipeLeft = async (idx: number) => {
+    try {
+      await functions().httpsCallable('swipedLeft')({ id: users[idx].id });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <View style={styles.homeContaier}>
@@ -38,14 +68,15 @@ const Home = () => {
           secondCardZoom={1}
           renderNoMoreCards={users.length === 0 ? () => <Text>No more cards</Text> : () => null}
           // onSwiped={(index) => console.log(index)}
-          onSwipedRight={(index) => console.log(index)}
+          onSwipedRight={handleSwipeRight}
+          // onSwipedLeft={handleSwipeLeft}
           ref={(cardSwiper) => {
             setSwiper(cardSwiper);
           }}>
           {users.map((user, index) => {
             return (
-              <Card style={styles.cardContainer}>
-                <CardItem key={index} user={user} />
+              <Card key={index} style={styles.cardContainer}>
+                <CardItem user={user} />
               </Card>
             );
           })}
