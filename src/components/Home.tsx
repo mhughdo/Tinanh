@@ -6,29 +6,33 @@ import CardStack, { Card } from 'react-native-card-stack-swiper';
 import CardItem from '@components/CardItem';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Header from '@shared/Header';
-// import fakeUsers from '../data/users';
-import useAuth from '@hooks/useAuth';
 import { userType } from '@reducers/appReducer';
 import functions, { firebase } from '@react-native-firebase/functions';
 import { useNavigation } from '@react-navigation/native';
+import { Spinner } from 'native-base';
+import Colors from '@constants/Colors';
+import fontSize from '@constants/fontSize';
 
 const Home = () => {
   // const swiper = useRef<CardStack | null>();
   const [swiper, setSwiper] = useState<CardStack | null>();
   const [users, setUsers] = useState<Partial<userType>[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
   useEffect(() => {
     const getAllUsers = async () => {
       try {
+        setLoading(true);
         const { data: users } = await functions().httpsCallable('getUsers')();
         const transformed = users.map((user) => ({
           ...user,
           dob: new firebase.firestore.Timestamp(user.dob._seconds, user.dob._nanoseconds),
         }));
-
+        setLoading(false);
         setUsers(transformed);
       } catch (error) {
+        setLoading(false);
         console.log(error.message);
       }
     };
@@ -36,11 +40,11 @@ const Home = () => {
     getAllUsers();
   }, []);
 
-  const handleSwipeRight = async (idx: number) => {
+  const handleSwipedUporRight = async (idx: number, isSuperLike = false) => {
     try {
       const {
         data: { matches, user },
-      } = await functions().httpsCallable('swipedRight')({ id: users[idx].id });
+      } = await functions().httpsCallable('swipedUpOrRight')({ id: users[idx].id, isSuperLike });
       if (matches) {
         navigation.navigate('MatchScreen', { user });
       }
@@ -52,24 +56,40 @@ const Home = () => {
 
   const handleSwipeLeft = async (idx: number) => {
     try {
+      // console.log('object');
       await functions().httpsCallable('swipedLeft')({ id: users[idx].id });
     } catch (error) {
       console.log(error.message);
     }
   };
 
+  const NoMoreCards = () => {
+    return (
+      <View style={styles.noMoreCardsContainer}>
+        <Text style={styles.noMoreCardsText}>No more cards</Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.homeContaier}>
       <Header />
       <View style={styles.bodyContainer}>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <Spinner color={Colors.mainTextColor} />
+          </View>
+        )}
+
         <CardStack
           style={styles.cardStackContainer}
           disableBottomSwipe
           secondCardZoom={1}
-          renderNoMoreCards={users.length === 0 ? () => <Text>No more cards</Text> : () => null}
+          renderNoMoreCards={users.length === 0 && !loading ? () => <NoMoreCards /> : () => null}
           // onSwiped={(index) => console.log(index)}
-          onSwipedRight={handleSwipeRight}
-          // onSwipedLeft={handleSwipeLeft}
+          onSwipedRight={handleSwipedUporRight}
+          onSwipedTop={(idx) => handleSwipedUporRight(idx, true)}
+          onSwipedLeft={handleSwipeLeft}
           ref={(cardSwiper) => {
             setSwiper(cardSwiper);
           }}>
@@ -81,17 +101,19 @@ const Home = () => {
             );
           })}
         </CardStack>
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity onPress={() => swiper?.swipeLeft()} style={[styles.circle]}>
-            <Ionicons name="md-close" size={35} color={colors.mainThemeForegroundColor} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => swiper?.swipeTop()} style={[styles.circle, styles.smallCircle]}>
-            <Ionicons name="ios-star" size={25} color={colors.blue} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => swiper?.swipeRight()} style={styles.circle}>
-            <Ionicons name="ios-heart" size={35} color={colors.onlineMarkColor} />
-          </TouchableOpacity>
-        </View>
+        {!loading && !!users.length && (
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity onPress={() => swiper?.swipeLeft()} style={[styles.circle]}>
+              <Ionicons name="md-close" size={35} color={colors.mainThemeForegroundColor} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => swiper?.swipeTop()} style={[styles.circle, styles.smallCircle]}>
+              <Ionicons name="ios-star" size={25} color={colors.blue} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => swiper?.swipeRight()} style={styles.circle}>
+              <Ionicons name="ios-heart" size={35} color={colors.onlineMarkColor} />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -106,6 +128,24 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flexGrow: 1,
     // backgroundColor: 'red',
+  },
+  noMoreCardsContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noMoreCardsText: {
+    fontSize: fontSize.base,
+    color: Colors.mainTextColor,
+  },
+  loadingContainer: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    zIndex: 100,
   },
   cardStackContainer: {
     flex: 1,
