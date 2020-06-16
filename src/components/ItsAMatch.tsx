@@ -10,15 +10,15 @@ import ProgressiveImage from './ProgressiveImage';
 const ItsAMatch = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { user } = route.params;
+  const { user, messageBoxID } = route.params;
   const image =
     user.photos[
       Object.keys(user.photos).find((key) => {
         return user.photos[key];
       }) || -1
     ];
-  const imageURI = image?.uri || require('../assets/images/unknown.png');
-  const thumbnailImageURI = image?.thumbnail || require('../assets/images/unknown.png');
+  const imageSource = image?.uri ? { uri: image.uri } : require('../assets/images/unknown.png');
+  const thumbnailSource = image?.thumbnail ? { uri: image.thumbnail } : require('../assets/images/unknown.png');
 
   const navigateToMessageBox = () => {
     navigation.navigate('MainTabs', {
@@ -27,6 +27,7 @@ const ItsAMatch = () => {
         screen: 'MessageBox',
         params: {
           user,
+          messageBoxID,
         },
       },
     });
@@ -34,7 +35,7 @@ const ItsAMatch = () => {
 
   return (
     <View>
-      <ProgressiveImage style={styles.image} thumbnailSource={{ uri: thumbnailImageURI }} source={{ uri: imageURI }} />
+      <ProgressiveImage style={styles.image} thumbnailSource={thumbnailSource} source={imageSource} />
       <View style={styles.actionsContainer}>
         <Text style={styles.matchText}>It's a match</Text>
         <Button onPress={navigateToMessageBox} style={styles.sendMessageButton}>

@@ -44,19 +44,22 @@ const UserDetails: React.FC<{ swipable?: boolean }> = ({ swipable = false }) => 
   const [carouselRef, setCarouselRef] = useState();
   const route = useRoute();
   const { user } = route.params;
-  const photos = Object.keys(user.photos).map((key) => ({
-    uri: user.photos[key].uri,
-    thumbnail: user.photos[key].thumbnail,
-  }));
+  const unknownImg = require('../assets/images/unknown.png');
+
+  const photos = user?.photos?.length
+    ? Object.keys(user.photos).map((key) => ({
+        uri: user.photos[key].uri,
+        thumbnail: user.photos[key].thumbnail,
+      }))
+    : [{}];
 
   const renderItem = ({ item, index }) => {
+    const source = item.uri ? { uri: item.uri } : unknownImg;
+    const thumbnailSource = item.thumbnail ? { uri: item.thumbnail } : unknownImg;
+
     return (
       <View style={styles.itemContainer}>
-        <ProgressiveImage
-          style={styles.itemImgContainer}
-          thumbnailSource={{ uri: item.thumbnail }}
-          source={{ uri: item.uri }}
-        />
+        <ProgressiveImage style={styles.itemImgContainer} thumbnailSource={thumbnailSource} source={source} />
       </View>
     );
   };

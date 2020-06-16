@@ -22,8 +22,10 @@ const CardItem = ({ user }) => {
       ]
     : {};
 
-  const heroImageURI = heroImage?.uri || require('../assets/images/unknown.png');
-  const thumbnailHeroImageURI = heroImage?.thumbnail;
+  const heroImageSource = heroImage?.uri ? { uri: heroImage?.uri } : require('../assets/images/unknown.png');
+  const thumbnailHeroImageSource = heroImage?.thumbnail
+    ? { uri: heroImage?.thumbnail }
+    : require('../assets/images/unknown.png');
   // const img = require();
 
   useEffect(() => {
@@ -38,11 +40,7 @@ const CardItem = ({ user }) => {
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate('UserDetailsScreen', { user })}
         style={styles.imgContainer}>
-        <ProgressiveImage
-          style={styles.img}
-          thumbnailSource={{ uri: thumbnailHeroImageURI }}
-          source={{ uri: heroImageURI }}
-        />
+        <ProgressiveImage style={styles.img} thumbnailSource={thumbnailHeroImageSource} source={heroImageSource} />
       </TouchableWithoutFeedback>
 
       <View style={styles.bodyContainer}>
