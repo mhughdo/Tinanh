@@ -9,7 +9,7 @@ import Header from '@shared/Header';
 import { userType } from '@reducers/appReducer';
 import functions, { firebase } from '@react-native-firebase/functions';
 import { useNavigation } from '@react-navigation/native';
-import { Spinner } from 'native-base';
+import { Spinner, Toast } from 'native-base';
 import Colors from '@constants/Colors';
 import fontSize from '@constants/fontSize';
 
@@ -33,6 +33,12 @@ const Home = () => {
         setUsers(transformed);
       } catch (error) {
         setLoading(false);
+        Toast.show({
+          text: 'Error getting users profile!',
+          buttonText: 'Okay',
+          type: 'warning',
+          duration: 3000,
+        });
         console.log(error.message);
       }
     };

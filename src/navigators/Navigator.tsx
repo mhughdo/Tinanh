@@ -11,6 +11,7 @@ import MatchScreen from '@components/ItsAMatch';
 import UserDetailsScreen from '@components/UserDetails';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MessageBox from '@components/MessageBox';
 
 const Tab = createBottomTabNavigator();
 const RootStack = createStackNavigator();
@@ -46,6 +47,13 @@ const MessengerStackScreen = () => {
   return (
     <MessengerStack.Navigator>
       <MessengerStack.Screen name="MessengerScreen" component={MessengerScreen} options={{ headerShown: false }} />
+      <MessengerStack.Screen
+        name="MessageBox"
+        component={MessageBox}
+        options={({ route }) => ({
+          title: route?.params?.user?.displayName || 'Message',
+        })}
+      />
     </MessengerStack.Navigator>
   );
 };
