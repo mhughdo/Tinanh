@@ -46,12 +46,14 @@ const UserDetails: React.FC<{ swipable?: boolean }> = ({ swipable = false }) => 
   const { user } = route.params;
   const unknownImg = require('../assets/images/unknown.png');
 
-  const photos = user?.photos?.length
+  const photos = Object.keys(user?.photos).length
     ? Object.keys(user.photos).map((key) => ({
         uri: user.photos[key].uri,
         thumbnail: user.photos[key].thumbnail,
       }))
     : [{}];
+
+  console.log(photos);
 
   const renderItem = ({ item, index }) => {
     const source = item.uri ? { uri: item.uri } : unknownImg;

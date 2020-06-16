@@ -25,39 +25,39 @@ const SignUp = ({ navigation: { navigate } }) => {
   const { dispatch } = useAppState();
 
   const handleSignUp = async () => {
-    if (!email || !password || !confirmPassword || !name) {
-      Toast.show({
-        text: 'All fields are required!',
-        buttonText: 'Okay',
-        type: 'warning',
-        duration: 3000,
-      });
-    } else if (!isValidEmail(email)) {
-      Toast.show({
-        text: 'Email is not valid!',
-        buttonText: 'Okay',
-        type: 'warning',
-        duration: 3000,
-      });
-    } else if (password.length < 8 || confirmPassword.length < 8) {
-      Toast.show({
-        text: 'Min password length is 8',
-        buttonText: 'Okay',
-        type: 'warning',
-        duration: 3000,
-      });
-    } else if (password !== confirmPassword) {
-      Toast.show({
-        text: 'Password and Confirm Password does not match!',
-        buttonText: 'Okay',
-        type: 'warning',
-        duration: 3000,
-      });
-    }
-
-    setLoading(true);
-
     try {
+      if (!email || !password || !confirmPassword || !name) {
+        Toast.show({
+          text: 'All fields are required!',
+          buttonText: 'Okay',
+          type: 'warning',
+          duration: 3000,
+        });
+      } else if (!isValidEmail(email)) {
+        Toast.show({
+          text: 'Email is not valid!',
+          buttonText: 'Okay',
+          type: 'warning',
+          duration: 3000,
+        });
+      } else if (password.length < 8 || confirmPassword.length < 8) {
+        Toast.show({
+          text: 'Min password length is 8',
+          buttonText: 'Okay',
+          type: 'warning',
+          duration: 3000,
+        });
+      } else if (password !== confirmPassword) {
+        Toast.show({
+          text: 'Password and Confirm Password does not match!',
+          buttonText: 'Okay',
+          type: 'warning',
+          duration: 3000,
+        });
+      }
+
+      setLoading(true);
+
       const userData = await auth().createUserWithEmailAndPassword(email, password);
       const isNewUser = userData.additionalUserInfo?.isNewUser;
       const avatarURL = await storage().ref('unknown_400x400.jpg').getDownloadURL();

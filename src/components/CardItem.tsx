@@ -14,7 +14,7 @@ import Colors from '@constants/Colors';
 const CardItem = ({ user }) => {
   const navigation = useNavigation();
 
-  const heroImage = user?.photos
+  const heroImage = Object.keys(user?.photos).length
     ? user?.photos[
         Object.keys(user?.photos).find((key) => {
           return user?.photos[key];

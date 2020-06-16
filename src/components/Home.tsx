@@ -25,15 +25,15 @@ const Home = () => {
       try {
         setLoading(true);
         const { data: users } = await functions().httpsCallable('getUsers')();
-        const transformed = users.map((user) => {
-          if (!user.dob) {
-            console.log(user);
-          }
-          return {
-            ...user,
-            dob: new firebase.firestore.Timestamp(user?.dob?._seconds, user?.dob?._nanoseconds),
-          };
-        });
+        console.log(users);
+        const transformed = users
+          .filter((user) => Boolean(user.dob))
+          .map((user) => {
+            return {
+              ...user,
+              dob: new firebase.firestore.Timestamp(user?.dob?._seconds, user?.dob?._nanoseconds),
+            };
+          });
         setLoading(false);
         setUsers(transformed);
       } catch (error) {
@@ -54,10 +54,10 @@ const Home = () => {
   const handleSwipedUporRight = async (idx: number, isSuperLike = false) => {
     try {
       const {
-        data: { matches, user },
+        data: { matches, user, messageBoxID },
       } = await functions().httpsCallable('swipedUpOrRight')({ id: users[idx].id, isSuperLike });
       if (matches) {
-        navigation.navigate('MatchScreen', { user });
+        navigation.navigate('MatchScreen', { user, messageBoxID });
       }
       //     console.log(data);
     } catch (error) {
