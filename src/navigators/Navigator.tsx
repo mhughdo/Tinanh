@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import HomeScreen from '@containers/HomeScreen/HomeScreen';
-import MessengerScreen from '@containers/MessengerScreen/MessengerScreen';
+import MessageScreen from '@containers/MessageScreen/MessageScreen';
 import SettingsScreen from '@containers/SettingsScreen/SettingsScreen';
 import AccountDetailsScreen from '@containers/AccountDetailsScreen/AccountDetailsScreen';
 import ProfileScreen from '@containers/ProfileScreen/ProfileScreen';
@@ -12,12 +12,15 @@ import UserDetailsScreen from '@components/UserDetails';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MessageBox from '@components/MessageBox';
+import Colors from '@constants/Colors';
+import { StyleSheet } from 'react-native';
+import normalize from 'react-native-normalize';
 
 const Tab = createBottomTabNavigator();
 const RootStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
-const MessengerStack = createStackNavigator();
+const MessageStack = createStackNavigator();
 
 const ProfileStackScreen = () => {
   return (
@@ -43,18 +46,27 @@ const HomeStackScreen = () => {
   );
 };
 
-const MessengerStackScreen = () => {
+const MessageStackScreen = () => {
   return (
-    <MessengerStack.Navigator>
-      <MessengerStack.Screen name="MessengerScreen" component={MessengerScreen} options={{ headerShown: false }} />
-      <MessengerStack.Screen
+    <MessageStack.Navigator>
+      <MessageStack.Screen name="MessageScreen" component={MessageScreen} options={{ headerShown: false }} />
+      <MessageStack.Screen
         name="MessageBox"
         component={MessageBox}
-        options={({ route }) => ({
+        options={({ route, navigation }) => ({
           title: route?.params?.user?.displayName || 'Message',
+          headerLeft: () => (
+            <Ionicons
+              name="ios-arrow-back"
+              size={28}
+              style={{ paddingLeft: normalize(10) }}
+              color={Colors.mainTextColor}
+              onPress={() => navigation.replace('MessageScreen')}
+            />
+          ),
         })}
       />
-    </MessengerStack.Navigator>
+    </MessageStack.Navigator>
   );
 };
 
@@ -75,7 +87,7 @@ const MainTabs = () => {
         inactiveTintColor: 'gray',
       }}>
       <Tab.Screen name="Home" component={HomeStackScreen} />
-      <Tab.Screen name="Message" component={MessengerStackScreen} />
+      <Tab.Screen name="Message" component={MessageStackScreen} />
     </Tab.Navigator>
   );
 };

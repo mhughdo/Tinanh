@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import Message from '@components/Message';
 
-const MessengerScreen = () => {
+const MessageScreen = () => {
   return (
     <SafeAreaView>
       <Message />
@@ -10,6 +10,6 @@ const MessengerScreen = () => {
   );
 };
 
-export default MessengerScreen;
+export default MessageScreen;
 
 const styles = StyleSheet.create({});

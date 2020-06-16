@@ -25,10 +25,15 @@ const Home = () => {
       try {
         setLoading(true);
         const { data: users } = await functions().httpsCallable('getUsers')();
-        const transformed = users.map((user) => ({
-          ...user,
-          dob: new firebase.firestore.Timestamp(user.dob._seconds, user.dob._nanoseconds),
-        }));
+        const transformed = users.map((user) => {
+          if (!user.dob) {
+            console.log(user);
+          }
+          return {
+            ...user,
+            dob: new firebase.firestore.Timestamp(user?.dob?._seconds, user?.dob?._nanoseconds),
+          };
+        });
         setLoading(false);
         setUsers(transformed);
       } catch (error) {

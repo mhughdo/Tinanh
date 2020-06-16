@@ -20,12 +20,24 @@ const ItsAMatch = () => {
   const imageURI = image?.uri || require('../assets/images/unknown.png');
   const thumbnailImageURI = image?.thumbnail || require('../assets/images/unknown.png');
 
+  const navigateToMessageBox = () => {
+    navigation.navigate('MainTabs', {
+      screen: 'Message',
+      params: {
+        screen: 'MessageBox',
+        params: {
+          user,
+        },
+      },
+    });
+  };
+
   return (
     <View>
       <ProgressiveImage style={styles.image} thumbnailSource={{ uri: thumbnailImageURI }} source={{ uri: imageURI }} />
       <View style={styles.actionsContainer}>
         <Text style={styles.matchText}>It's a match</Text>
-        <Button style={styles.sendMessageButton}>
+        <Button onPress={navigateToMessageBox} style={styles.sendMessageButton}>
           <Text style={styles.sendMessageText}>Send a message</Text>
         </Button>
         <Button onPress={() => navigation.goBack()} transparent>
