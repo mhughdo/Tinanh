@@ -61,7 +61,12 @@ const MessageStackScreen = () => {
               size={28}
               style={{ paddingLeft: normalize(10) }}
               color={Colors.mainTextColor}
-              onPress={() => navigation.replace('MessageScreen')}
+              onPress={() => {
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: 'MessageScreen' }],
+                });
+              }}
             />
           ),
         })}
