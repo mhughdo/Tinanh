@@ -1,40 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GiftedChat, Bubble, Send, IMessage, User } from 'react-native-gifted-chat';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import Colors from '@constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import normalize from 'react-native-normalize';
+import { useRoute } from '@react-navigation/native';
+import { db } from '@utils';
+import useAuth from '@hooks/useAuth';
 
 type MessageType = Omit<IMessage, 'user'> & { user?: User | undefined };
 
 export default function MessageBox() {
-  const [messages, setMessages] = useState<MessageType[]>([
-    /**
-     * Mock message data
-     */
-    // example of system message
+  const route = useRoute();
+  const { messageBoxID } = route.params;
+  const { auth } = useAuth();
 
-    // example of chat message
-    {
-      _id: 1,
-      text: 'Henlo!',
-      createdAt: new Date().getTime(),
-      user: {
-        _id: 1,
-        name: 'Test User',
-      },
-    },
-    {
-      _id: 0,
-      text: 'New room created.',
-      createdAt: new Date().getTime(),
-      system: true,
-    },
-  ]);
+  const [messages, setMessages] = useState<MessageType[]>([]);
+
+  useEffect(() => {
+    const messagesListener = db
+      .collection('messages')
+      .doc(messageBoxID)
+      .collection('MESSAGES')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((querySnapshot: any) => {
+        const messages = querySnapshot.docs.map((doc) => {
+          const firebaseData = doc.data();
+
+          const data = {
+            _id: doc.id,
+            text: '',
+            createdAt: new Date().getTime(),
+            ...firebaseData,
+          };
+
+          if (!firebaseData.system) {
+            data.user = {
+              ...firebaseData.user,
+              name: firebaseData.user.name,
+            };
+          }
+
+          return data;
+        });
+
+        setMessages(messages);
+      });
+
+    return () => messagesListener();
+  }, [messageBoxID]);
 
   // helper method that is sends a message
-  const handleSend = (newMessage: MessageType[] = []) => {
-    setMessages(GiftedChat.append(messages, newMessage));
+  const handleSend = async (newMessages: MessageType[] = []) => {
+    try {
+      const text = newMessages[0].text;
+
+      setMessages(GiftedChat.append(messages, newMessages));
+      await db
+        .collection('messages')
+        .doc(messageBoxID)
+        .collection('MESSAGES')
+        .add({
+          text,
+          createdAt: new Date().getTime(),
+          user: {
+            _id: auth?.id,
+            name: auth?.displayName,
+            avatar: auth?.avatarURL,
+          },
+        });
+      db.collection('messages')
+        .doc(messageBoxID)
+        .set(
+          {
+            latestMessage: {
+              text,
+              createdAt: new Date().getTime(),
+              userID: auth?.id,
+            },
+          },
+          { merge: true },
+        );
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const scrollToBottomComponent = () => {
@@ -91,7 +140,7 @@ export default function MessageBox() {
       messages={messages}
       onSend={(newMessage) => handleSend(newMessage)}
       placeholder="Type your message here..."
-      user={{ _id: 1, name: 'Test User' }}
+      user={{ _id: auth?.id, name: auth?.displayName }}
       renderBubble={renderBubble}
       renderSend={renderSend}
       showUserAvatar

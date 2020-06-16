@@ -13,6 +13,7 @@ export type userType = {
     gender: string;
     age: number;
   };
+  messages: { messageBoxID: string; userIDs: string[] }[];
   bio: string;
   age: number;
   school: string;

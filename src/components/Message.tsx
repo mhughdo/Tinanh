@@ -7,10 +7,14 @@ import fontSize from '@constants/fontSize';
 import { useNavigation } from '@react-navigation/native';
 import functions from '@react-native-firebase/functions';
 import { userType } from '@reducers/appReducer';
+import useAuth from '@hooks/useAuth';
 
 export default function Message() {
   const [matches, setMatches] = useState<Partial<userType>[]>([]);
   const [matchesLoading, setMatchesLoading] = useState(false);
+  const { auth } = useAuth();
+
+  const userID = auth?.id || '';
 
   useEffect(() => {
     const getMatches = async () => {
@@ -40,21 +44,29 @@ export default function Message() {
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
               {matches.map((user) => {
                 return (
-                  <View key={user.displayName} style={styles.matchUserContainer}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('MessageBox', {
+                        messageBoxID: user?.messages?.find((item) => item.userIDs.includes(userID))?.messageBoxID,
+                        user,
+                      })
+                    }
+                    key={user.displayName}
+                    style={styles.matchUserContainer}>
                     <View style={styles.matchAvatarContainer}>
                       <Image source={{ uri: user.avatarURL }} style={styles.matchAvatar} />
                     </View>
                     <View style={styles.matchTextContainer}>
                       <Text style={styles.matchText}>{user.displayName}</Text>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 );
               })}
             </ScrollView>
-          ) : (
-            <Text style={styles.noMatchesText}>You have no matches</Text>
-          )
-        ) : null}
+          ) : null
+        ) : (
+          <Text style={styles.noMatchesText}>You have no matches</Text>
+        )}
       </View>
       <View style={styles.messageSectionContainer}>
         <Text style={styles.messageHeaderText}>Messages</Text>
