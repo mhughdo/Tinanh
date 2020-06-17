@@ -17,6 +17,7 @@ import { uploadFileToFireBase, getSmallerImage } from '@utils/index';
 import { useNavigation } from '@react-navigation/native';
 import { db } from '@utils/index';
 
+const largeImageSize = 800;
 const mediumImageSize = 400;
 const smallImageSize = 50;
 const imagesLength = 6;
@@ -101,7 +102,7 @@ const ProfileScreen = () => {
           const updated = snapshot.metadata.updated;
           const mediumURL = await getImageUrl(imageName, mediumImageSize, auth, updated);
           const smallURL = await getImageUrl(imageName, smallImageSize, auth, updated);
-          const bigURL = await snapshot.ref.getDownloadURL();
+          const bigURL = await getImageUrl(imageName, largeImageSize, auth, updated);
           const uri = mediumURL || bigURL;
           const userRef = db.collection('users').doc(`${auth?.id}`);
           const userData = (await userRef.get()).data();
