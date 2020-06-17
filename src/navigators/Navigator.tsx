@@ -13,7 +13,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MessageBox from '@components/MessageBox';
 import Colors from '@constants/Colors';
-import { StyleSheet } from 'react-native';
 import normalize from 'react-native-normalize';
 
 const Tab = createBottomTabNavigator();

@@ -4,7 +4,7 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import Colors from '@constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import normalize from 'react-native-normalize';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { db } from '@utils';
 import useAuth from '@hooks/useAuth';
 
@@ -12,42 +12,43 @@ type MessageType = Omit<IMessage, 'user'> & { user?: User | undefined };
 
 export default function MessageBox() {
   const route = useRoute();
-  const { messageBoxID } = route.params;
+  const { messageBoxID, user: partnerData } = route.params;
   const { auth } = useAuth();
+  const navigation = useNavigation();
 
   const [messages, setMessages] = useState<MessageType[]>([]);
 
   useEffect(() => {
-    const messagesListener = db
-      .collection('messages')
-      .doc(messageBoxID)
-      .collection('MESSAGES')
-      .orderBy('createdAt', 'desc')
-      .onSnapshot((querySnapshot: any) => {
-        const messages = querySnapshot.docs.map((doc) => {
-          const firebaseData = doc.data();
+    if (messageBoxID) {
+      return db
+        .collection('messages')
+        .doc(messageBoxID)
+        .collection('MESSAGES')
+        .orderBy('createdAt', 'desc')
+        .onSnapshot((querySnapshot: any) => {
+          const messages = querySnapshot.docs.map((doc) => {
+            const firebaseData = doc.data();
 
-          const data = {
-            _id: doc.id,
-            text: '',
-            createdAt: new Date().getTime(),
-            ...firebaseData,
-          };
-
-          if (!firebaseData.system) {
-            data.user = {
-              ...firebaseData.user,
-              name: firebaseData.user.name,
+            const data = {
+              _id: doc.id,
+              text: '',
+              createdAt: new Date().getTime(),
+              ...firebaseData,
             };
-          }
 
-          return data;
+            if (!firebaseData.system) {
+              data.user = {
+                ...firebaseData.user,
+                name: firebaseData.user.name,
+              };
+            }
+
+            return data;
+          });
+
+          setMessages(messages);
         });
-
-        setMessages(messages);
-      });
-
-    return () => messagesListener();
+    }
   }, [messageBoxID]);
 
   // helper method that is sends a message
@@ -84,6 +85,17 @@ export default function MessageBox() {
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  const handlePressAvatar = (user) => {
+    const userData = user._id === auth?.id ? auth : partnerData;
+
+    navigation.navigate('Home', {
+      screen: 'UserDetailsScreen',
+      params: {
+        user: userData,
+      },
+    });
   };
 
   const scrollToBottomComponent = () => {
@@ -147,6 +159,7 @@ export default function MessageBox() {
       scrollToBottom
       scrollToBottomComponent={scrollToBottomComponent}
       renderLoading={renderLoading}
+      onPressAvatar={handlePressAvatar}
     />
   );
 }

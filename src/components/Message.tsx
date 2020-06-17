@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
-import users from '../data/users';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, StatusBar } from 'react-native';
 import normalize from 'react-native-normalize';
 import Colors from '@constants/Colors';
 import fontSize from '@constants/fontSize';
@@ -8,35 +7,101 @@ import { useNavigation } from '@react-navigation/native';
 import functions from '@react-native-firebase/functions';
 import { userType } from '@reducers/appReducer';
 import useAuth from '@hooks/useAuth';
+import { Spinner } from 'native-base';
+import { db } from '@utils';
+import { firebase } from '@react-native-firebase/firestore';
 
 export default function Message() {
   const [matches, setMatches] = useState<Partial<userType>[]>([]);
   const [matchesLoading, setMatchesLoading] = useState(false);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [messagesLoading, setMessagesLoading] = useState(false);
   const { auth } = useAuth();
+
+  const messageBoxIDs = auth?.messages.map((item) => item.messageBoxID);
 
   const userID = auth?.id || '';
 
   useEffect(() => {
-    const getMatches = async () => {
-      try {
-        setMatchesLoading(true);
-        const { data } = await functions().httpsCallable('getMatches')();
-        if (data?.length) {
-          setMatches(data);
-          setMatchesLoading(false);
-        }
-      } catch (error) {
-        setMatchesLoading(false);
-        console.log(error);
-      }
-    };
+    try {
+      let stillMounted = true;
+      const unsubscribe = firebase
+        .firestore()
+        .doc(`users/${auth?.id}`)
+        .onSnapshot(async (userSnapshot: any) => {
+          const res: any[] = [];
+          setMatchesLoading(true);
+          const matchedUsers = userSnapshot.data()?.matches || [];
 
-    getMatches();
+          for (const matchedUser of matchedUsers) {
+            const matchedUserData = (await firebase.firestore().doc(`users/${matchedUser.id}`).get()).data();
+            res.push(matchedUserData);
+          }
+          if (stillMounted) {
+            if (res.length) {
+              setMatches(res);
+            }
+            setMatchesLoading(false);
+          }
+        });
+      return () => {
+        stillMounted = false;
+        unsubscribe();
+      };
+    } catch (error) {
+      setMatchesLoading(false);
+      console.log(error);
+    }
   }, []);
+
+  useEffect(() => {
+    try {
+      let stillMounted = true;
+      const unsubscribe = db
+        .collection('messages')
+        .orderBy('latestMessage.createdAt', 'desc')
+        .onSnapshot(async (querySnapshot: any) => {
+          setMessagesLoading(true);
+          const messages: any[] = [];
+          const messageSnapshots = querySnapshot.docs.filter((documentSnapshot: any) =>
+            messageBoxIDs?.includes(documentSnapshot.id),
+          );
+          for (const messageSnapshot of messageSnapshots) {
+            const partnerID = auth?.messages.find((item) => messageSnapshot.id === item.messageBoxID)?.userIDs[1];
+            const partnerData = (await db.doc(`users/${partnerID}`).get()).data();
+            messages.push({
+              _id: messageSnapshot.id,
+              name: '',
+              // add this
+              latestMessage: {
+                text: '',
+              },
+              partner: partnerData,
+              // ---
+              ...messageSnapshot.data(),
+            });
+          }
+          if (stillMounted) {
+            if (messages.length) {
+              setMessages(messages);
+            }
+            setMessagesLoading(false);
+          }
+        });
+      return () => {
+        stillMounted = false;
+        unsubscribe();
+      };
+    } catch (error) {
+      setMessagesLoading(false);
+      console.log(error.message);
+    }
+  }, []);
+
   const navigation = useNavigation();
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.matchesContainer}>
         <Text style={styles.matchesHeaderText}>Matches</Text>
         {!matchesLoading ? (
@@ -63,30 +128,43 @@ export default function Message() {
                 );
               })}
             </ScrollView>
-          ) : null
-        ) : (
-          <Text style={styles.noMatchesText}>You have no matches</Text>
-        )}
+          ) : (
+            <Text style={styles.noResultText}>You have no matches</Text>
+          )
+        ) : null}
       </View>
       <View style={styles.messageSectionContainer}>
         <Text style={styles.messageHeaderText}>Messages</Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {users.map((user) => {
-            return (
-              <TouchableOpacity onPress={() => navigation.navigate('MessageBox', { user })}>
-                <View style={styles.userMessageContainer}>
-                  <View style={styles.messageAvatarContainer}>
-                    <Image source={user.images} style={styles.messageAvatar} />
-                  </View>
-                  <View style={styles.messageTextContainer}>
-                    <Text style={styles.displayNameText}>{user.displayName}</Text>
-                    <Text style={styles.latestMessageText}>aaa</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+        {!messagesLoading ? (
+          messages.length ? (
+            <View>
+              {messages.map((message) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('MessageBox', { user: message.partner, messageBoxID: message._id })
+                    }>
+                    <View style={styles.userMessageContainer}>
+                      <View style={styles.messageAvatarContainer}>
+                        <Image source={{ uri: message.partner.avatarURL }} style={styles.messageAvatar} />
+                      </View>
+                      <View style={styles.messageTextContainer}>
+                        <Text style={styles.displayNameText}>{message.partner.displayName}</Text>
+                        <Text style={styles.latestMessageText}>{message.latestMessage.text}</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          ) : (
+            <Text style={styles.noResultText}>You have no messages</Text>
+          )
+        ) : (
+          <View>
+            <Spinner color={Colors.mainSubtextColor} />
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -125,7 +203,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Colors.mainSubtextColor,
   },
-  noMatchesText: {
+  noResultText: {
     fontSize: fontSize.xs,
   },
   messageSectionContainer: {
