@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import useAuth from '@hooks/useAuth';
+import { db, FirebaseFirestoreTypes } from '@utils/index';
 import {
   Container,
   Header,
@@ -15,16 +17,53 @@ import {
   Body,
   Right,
   Title,
+  DatePicker,
+  Toast,
 } from 'native-base';
 import normalize from 'react-native-normalize';
+import { userType } from '@reducers/appReducer';
+
+type UserType = userType & {
+  displayName: string;
+  dob: FirebaseFirestoreTypes.Timestamp;
+  bio: string;
+  school: string;
+};
 
 const AccountDetails = () => {
   const navigation = useNavigation();
-
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
+  const { auth } = useAuth();
+  useEffect(() => {
+    console.log(auth);
+    let { displayName, dob, bio, school } = auth as UserType;
+    let date = dob.toDate().getDate();
+    let month = dob.toDate().getMonth() + 1;
+    let year = dob.toDate().getFullYear();
+    setDisplayName(displayName);
+    setDob(dob.toDate());
+    setBio(bio);
+    setTempDob(`${date}/${month}/${year}`);
+    setSchool(school);
+  }, [auth]);
+  const [displayName, setDisplayName] = useState('');
+  const [tempDob, setTempDob] = useState('');
+  const [dob, setDob] = useState<any>();
   const [bio, setBio] = useState('');
   const [school, setSchool] = useState('');
+
+  const onUpdate = async () => {
+    await db
+      .doc(`users/${auth?.id}`)
+      .set({ displayName, dob: new Date(dob), bio, school }, { merge: true })
+      .then(() => {
+        Toast.show({
+          text: 'User information was updated successfully!',
+          buttonText: 'Okay',
+          type: 'success',
+          duration: 3000,
+        });
+      });
+  };
   return (
     <Container style={styles.container}>
       <Header style={styles.header}>
@@ -38,7 +77,7 @@ const AccountDetails = () => {
           <Title>Edit Profile</Title>
         </Body>
         <Right>
-          <Button transparent>
+          <Button transparent onPress={onUpdate}>
             <Text>Done</Text>
           </Button>
         </Right>
@@ -48,8 +87,15 @@ const AccountDetails = () => {
           <Separator bordered style={styles.separator}>
             <Text style={styles.separatorText}>PUBLIC PROFILE</Text>
           </Separator>
-          <Item title="Name" value={name} setValue={setName} />
-          <Item title="Age" value={age} setValue={setAge} />
+          <Item title="Name" value={displayName} setValue={setDisplayName} />
+          <ListItem icon>
+            <Body>
+              <Text>Age</Text>
+            </Body>
+            <Right style={{ maxWidth: '50%' }}>
+              <DatePicker placeHolderText={tempDob} onDateChange={setDob} />
+            </Right>
+          </ListItem>
           <Item title="Bio" value={bio} setValue={setBio} />
           <Item title="School" value={school} setValue={setSchool} />
         </List>

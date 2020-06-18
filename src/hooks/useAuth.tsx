@@ -27,6 +27,7 @@ export default function useAuth() {
     const unsubscribe = db
       .doc(`users/${auth?.id}`)
       .onSnapshot(async (userSnapshot: FirebaseFirestoreTypes.DocumentSnapshot) => {
+        console.log(userSnapshot.data());
         const age = userSnapshot.data()?.dob ? calculateAge(userSnapshot?.data()?.dob?.toDate()) : null;
         dispatch({
           type: AppActionType.AUTH_CHANGE,
