@@ -4,12 +4,15 @@ import normalize from 'react-native-normalize';
 import Colors from '@constants/Colors';
 import fontSize from '@constants/fontSize';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import functions from '@react-native-firebase/functions';
 import { userType } from '@reducers/appReducer';
-import useAuth from '@hooks/useAuth';
 import { Spinner } from 'native-base';
 import { db } from '@utils';
 import { firebase } from '@react-native-firebase/firestore';
+import useAuth from '@hooks/useAuth';
+import FastImage from 'react-native-fast-image';
+import users from '../data/users';
+
+const partnerDatas: any = {};
 
 export default function Message() {
   const [matches, setMatches] = useState<Partial<userType>[]>([]);
@@ -19,7 +22,7 @@ export default function Message() {
   const { auth } = useAuth();
   const route = useRoute();
 
-  const messageBoxIDs = auth?.messages.map((item) => item.messageBoxID);
+  const messageBoxIDs = auth?.messages?.map((item) => item.messageBoxID) || [];
 
   const userID = auth?.id || '';
 
@@ -84,8 +87,15 @@ export default function Message() {
             messageBoxIDs?.includes(documentSnapshot.id),
           );
           for (const messageSnapshot of messageSnapshots) {
-            const partnerID = auth?.messages.find((item) => messageSnapshot.id === item.messageBoxID)?.userIDs[1];
-            const partnerData = (await db.doc(`users/${partnerID}`).get()).data();
+            let partnerData = {};
+            const partnerID = auth?.messages.find((item) => messageSnapshot.id === item.messageBoxID)
+              ?.userIDs[1] as string;
+            if (partnerDatas[partnerID]) {
+              partnerData = partnerDatas[partnerID];
+            } else {
+              partnerData = (await db.doc(`users/${partnerID}`).get()).data();
+              partnerDatas[partnerID] = partnerData;
+            }
             messages.push({
               _id: messageSnapshot.id,
               name: '',
@@ -152,14 +162,18 @@ export default function Message() {
           ) : (
             <Text style={styles.noResultText}>You have no matches</Text>
           )
-        ) : null}
+        ) : (
+          <View>
+            <Spinner color={Colors.mainSubtextColor} />
+          </View>
+        )}
       </View>
       <View style={styles.messageSectionContainer}>
         <Text style={styles.messageHeaderText}>Messages</Text>
         {!messagesLoading ? (
-          messages.length ? (
+          messages?.length ? (
             <View>
-              {messages.map((message) => {
+              {messages?.map((message) => {
                 return (
                   <TouchableOpacity
                     key={message.partner.id}
@@ -168,7 +182,7 @@ export default function Message() {
                     }>
                     <View style={styles.userMessageContainer}>
                       <View style={styles.messageAvatarContainer}>
-                        <Image source={{ uri: message.partner.avatarURL }} style={styles.messageAvatar} />
+                        <FastImage source={{ uri: message.partner.avatarURL }} style={styles.messageAvatar} />
                       </View>
                       <View style={styles.messageTextContainer}>
                         <Text style={styles.displayNameText}>{message.partner.displayName}</Text>
@@ -182,11 +196,7 @@ export default function Message() {
           ) : (
             <Text style={styles.noResultText}>You have no messages</Text>
           )
-        ) : (
-          <View>
-            <Spinner color={Colors.mainSubtextColor} />
-          </View>
-        )}
+        ) : null}
       </View>
     </ScrollView>
   );

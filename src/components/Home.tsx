@@ -27,14 +27,15 @@ const Home = () => {
       try {
         setLoading(true);
         const { data: users } = await functions().httpsCallable('getUsers')();
-        console.log(users);
         const transformed = users
           .filter((user) => Boolean(user.dob))
           .map((user) => {
-            return {
-              ...user,
-              dob: new firebase.firestore.Timestamp(user?.dob?._seconds, user?.dob?._nanoseconds),
-            };
+            if (user?.dob?._seconds) {
+              return {
+                ...user,
+                dob: new firebase.firestore.Timestamp(user?.dob?._seconds, user?.dob?._nanoseconds),
+              };
+            }
           });
         setLoading(false);
         setUsers(transformed);
@@ -46,7 +47,8 @@ const Home = () => {
           type: 'warning',
           duration: 3000,
         });
-        console.log(error.message);
+        console.log(error);
+        return;
       }
     };
 
