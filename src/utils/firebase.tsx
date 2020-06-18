@@ -1,6 +1,8 @@
-import firestore from '@react-native-firebase/firestore';
+import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 
 export const db = firestore();
+
+export { FirebaseFirestoreTypes };
 
 export const createUserProfileDocument = async (userAuth, additionalData, createIfNotExisted) => {
   if (!userAuth) {
