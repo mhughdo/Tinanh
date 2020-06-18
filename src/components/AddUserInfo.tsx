@@ -156,8 +156,8 @@ const AddUserInfo = () => {
             }}
             selectedValue={gender}
             onValueChange={setGender}>
-            <Picker.Item label="Women" value="women" />
-            <Picker.Item label="Men" value="men" />
+            <Picker.Item label="Female" value="Female" />
+            <Picker.Item label="Male" value="Male" />
             <Picker.Item label="Other" value="other" />
           </Picker>
         </Form>

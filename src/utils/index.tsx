@@ -61,3 +61,7 @@ export const calculateAge = (dob) => {
 
   return thisYear - userYear;
 };
+
+export const randNum = (min = 1, max = 20) => {
+  return Math.floor(Math.random() * max) + min;
+};

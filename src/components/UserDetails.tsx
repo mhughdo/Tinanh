@@ -129,7 +129,7 @@ const UserDetails: React.FC<{ swipable?: boolean }> = ({ swipable = false }) => 
               </View>
               <Text style={styles.bioHeaderText}>About</Text>
             </View>
-            <Text style={styles.bioText}>This is a bio This is a bio This is a bio This is a bio</Text>
+            <Text style={styles.bioText}>T{user.bio}</Text>
           </View>
           <View style={styles.interestedContainer}>
             <View style={styles.interestedHeaderContainer}>

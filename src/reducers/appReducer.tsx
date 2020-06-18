@@ -11,7 +11,8 @@ export type userType = {
   settings: {
     maxDistance: number;
     gender: string;
-    age: number;
+    minAge: number;
+    maxAge: number;
   };
   messages: { messageBoxID: string; userIDs: string[] }[];
   bio: string;

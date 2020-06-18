@@ -11,6 +11,7 @@ import { calculateAge } from '@utils';
 import ProgressiveImage from '@components/ProgressiveImage';
 import Colors from '@constants/Colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { randNum } from '@utils';
 
 const CardItem = ({ user, isSuperLike = false }) => {
   const navigation = useNavigation();
@@ -63,7 +64,7 @@ const CardItem = ({ user, isSuperLike = false }) => {
           </View>
           <View style={styles.distanceTextContainer}>
             <MaterialCommunityIcons name="map-marker-outline" color="#ffffff" size={16} />
-            <Text style={styles.distanceText}>5 kilometers away</Text>
+            <Text style={styles.distanceText}>{randNum()} kilometers away</Text>
           </View>
         </View>
       </View>

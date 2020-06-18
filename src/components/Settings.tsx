@@ -4,12 +4,27 @@ import Modal from 'react-native-modal';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import normalize from 'react-native-normalize';
+import useAuth from '@hooks/useAuth';
+import functions from '@react-native-firebase/functions';
 
 const Settings = ({ isVisible = false, setIsVisible }: { isVisible: boolean; setIsVisible: Function }) => {
-  const [distance, setDistance] = useState(0);
-  const [minAge, setMinAge] = useState(0);
-  const [maxAge, setMaxAge] = useState(0);
-  const [gender, setGender] = useState('');
+  const { auth } = useAuth();
+  const [distance, setDistance] = useState(auth?.settings?.maxDistance || 100);
+  const [minAge, setMinAge] = useState(auth?.settings?.minAge || 0);
+  const [maxAge, setMaxAge] = useState(auth?.settings?.maxAge || 25);
+  const [gender, setGender] = useState(auth?.settings?.gender || 'Everyone');
+
+  const handleSave = async () => {
+    try {
+      console.log(minAge, maxAge, gender);
+      await functions().httpsCallable('updateSettings')({ minAge, maxAge, gender });
+      setIsVisible(false);
+    } catch (error) {}
+  };
+
+  const handleCancel = () => {
+    setIsVisible(false);
+  };
 
   const renderCustomAge = () => (
     <View style={styles.option}>
@@ -62,9 +77,9 @@ const Settings = ({ isVisible = false, setIsVisible }: { isVisible: boolean; set
     <View style={styles.option}>
       <Text style={styles.optionText}>Gender</Text>
       <View style={styles.gender}>
+        {renderGenderItem('Everyone')}
         {renderGenderItem('Female')}
         {renderGenderItem('Male')}
-        {renderGenderItem('Shemale')}
       </View>
     </View>
   );
@@ -82,11 +97,11 @@ const Settings = ({ isVisible = false, setIsVisible }: { isVisible: boolean; set
       <Modal isVisible={isVisible} backdropOpacity={0.1}>
         <View style={styles.content}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => setIsVisible(false)}>
+            <TouchableOpacity onPress={handleCancel}>
               <Ionicons name="ios-close" style={styles.icon} />
             </TouchableOpacity>
             <Text style={styles.title}>Filters</Text>
-            <TouchableOpacity onPress={() => setIsVisible(false)}>
+            <TouchableOpacity onPress={handleSave}>
               <Ionicons name="ios-checkmark" style={styles.icon} />
             </TouchableOpacity>
           </View>

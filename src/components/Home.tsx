@@ -14,7 +14,7 @@ import Colors from '@constants/Colors';
 import fontSize from '@constants/fontSize';
 import useAuth from '@hooks/useAuth';
 
-const Home = ({ setIsVisible }: { setIsVisible: Function }) => {
+const Home = ({ isVisible, setIsVisible }: { setIsVisible: Function }) => {
   // const swiper = useRef<CardStack | null>();
   const [swiper, setSwiper] = useState<CardStack | null>();
   const [users, setUsers] = useState<Partial<userType>[]>([]);
@@ -53,7 +53,7 @@ const Home = ({ setIsVisible }: { setIsVisible: Function }) => {
     };
 
     getAllUsers();
-  }, []);
+  }, [auth?.settings?.gender, auth?.settings?.maxAge, auth?.settings?.minAge]);
 
   const handleSwipedUporRight = async (idx: number, isSuperLike = false) => {
     try {
