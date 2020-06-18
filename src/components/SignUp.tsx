@@ -11,6 +11,8 @@ import { useAppState } from '../store/appState';
 import { AppActionType } from '../reducers/appReducer';
 import storage from '@react-native-firebase/storage';
 
+console.reportErrorsAsExceptions = false;
+
 const isValidEmail = (email: string) => {
   let pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return pattern.test(String(email).toLowerCase());
@@ -98,7 +100,7 @@ const SignUp = ({ navigation: { navigate } }) => {
         });
       }
       setLoading(false);
-      console.error(error);
+      console.error('Error signing up', error);
     }
   };
 
