@@ -53,8 +53,6 @@ const UserDetails: React.FC<{ swipable?: boolean }> = ({ swipable = false }) => 
       }))
     : [{}];
 
-  console.log(photos);
-
   const renderItem = ({ item, index }) => {
     const source = item.uri ? { uri: item.uri } : unknownImg;
     const thumbnailSource = item.thumbnail ? { uri: item.thumbnail } : unknownImg;

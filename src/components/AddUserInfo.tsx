@@ -66,8 +66,8 @@ const AddUserInfo = () => {
             isNewUser: false,
           };
           await userRef.update(data);
-          dispatch({ type: AppActionType.AUTH_CHANGE, auth: { ...auth, ...data } });
           setLoading(false);
+          dispatch({ type: AppActionType.AUTH_CHANGE, auth: { ...auth, ...data } });
         } catch (error) {
           setLoading(false);
           Toast.show({

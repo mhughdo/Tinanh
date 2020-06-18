@@ -10,7 +10,6 @@ import { db } from '@utils';
 import { firebase } from '@react-native-firebase/firestore';
 import useAuth from '@hooks/useAuth';
 import FastImage from 'react-native-fast-image';
-import users from '../data/users';
 
 const partnerDatas: any = {};
 
@@ -28,7 +27,7 @@ export default function Message() {
 
   useEffect(() => {
     if (route.params?.unMatchUserID) {
-      console.log(route.params?.unMatchUserID);
+      // console.log(route.params?.unMatchUserID);
 
       if (matches.length) {
         setMatches(matches?.filter((match) => match.id !== route.params?.unMatchUserID));
@@ -96,17 +95,18 @@ export default function Message() {
               partnerData = (await db.doc(`users/${partnerID}`).get()).data();
               partnerDatas[partnerID] = partnerData;
             }
-            messages.push({
-              _id: messageSnapshot.id,
-              name: '',
-              // add this
-              latestMessage: {
-                text: '',
-              },
-              partner: partnerData,
-              // ---
-              ...messageSnapshot.data(),
-            });
+            if (!messageSnapshot.data()?.latestMessage?.text.includes('matched.')) {
+              messages.push({
+                _id: messageSnapshot.id,
+                name: '',
+                // add this
+                latestMessage: {
+                  text: '',
+                },
+                partner: partnerData,
+                ...messageSnapshot.data(),
+              });
+            }
           }
           if (stillMounted) {
             if (messages.length) {
