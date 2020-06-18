@@ -12,12 +12,14 @@ import { useNavigation } from '@react-navigation/native';
 import { Spinner, Toast } from 'native-base';
 import Colors from '@constants/Colors';
 import fontSize from '@constants/fontSize';
+import useAuth from '@hooks/useAuth';
 
 const Home = () => {
   // const swiper = useRef<CardStack | null>();
   const [swiper, setSwiper] = useState<CardStack | null>();
   const [users, setUsers] = useState<Partial<userType>[]>([]);
   const [loading, setLoading] = useState(true);
+  const { auth } = useAuth();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -105,9 +107,11 @@ const Home = () => {
             setSwiper(cardSwiper);
           }}>
           {users.map((user, index) => {
+            const isSuperLike = auth?.isLiked?.find((userr) => userr.id === user.id)?.isSuperLike === true;
+
             return (
               <Card key={index} style={styles.cardContainer}>
-                <CardItem user={user} />
+                <CardItem user={user} isSuperLike={isSuperLike} />
               </Card>
             );
           })}

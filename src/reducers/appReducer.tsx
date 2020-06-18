@@ -6,7 +6,7 @@ export type userType = {
   photos: string[];
   liked: string[];
   disliked: string[];
-  isLiked: string[];
+  isLiked: { id: string; isSuperLike: boolean }[];
   matches: string[];
   settings: {
     maxDistance: number;

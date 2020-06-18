@@ -10,8 +10,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import { calculateAge } from '@utils';
 import ProgressiveImage from '@components/ProgressiveImage';
 import Colors from '@constants/Colors';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
-const CardItem = ({ user }) => {
+const CardItem = ({ user, isSuperLike = false }) => {
   const navigation = useNavigation();
 
   const heroImage = Object.keys(user?.photos).length
@@ -47,13 +48,14 @@ const CardItem = ({ user }) => {
         <LinearGradient
           start={{ x: 0, y: 1 }}
           end={{ x: 0, y: 0 }}
-          colors={['rgba(0,0,0,0.5)', '#00000000']}
+          colors={[isSuperLike ? '#3ca4ff' : 'rgba(0,0,0,0.5)', '#00000000']}
           style={styles.gradientBox}
         />
 
         <View style={styles.infoContainer}>
           <Text style={styles.nameAgeText}>
-            {user.displayName}, {calculateAge(user?.dob.toDate())}
+            {user.displayName}, {calculateAge(user?.dob.toDate())}{' '}
+            {isSuperLike && <AntDesign name="star" size={normalize(22)} color={Colors.blue} />}
           </Text>
           <View style={styles.schoolTextContainer}>
             <Ionicons name="md-school" color="#ffffff" size={16} />
