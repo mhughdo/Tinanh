@@ -14,7 +14,7 @@ import Colors from '@constants/Colors';
 import fontSize from '@constants/fontSize';
 import useAuth from '@hooks/useAuth';
 
-const Home = () => {
+const Home = ({ setIsVisible }: { setIsVisible: Function }) => {
   // const swiper = useRef<CardStack | null>();
   const [swiper, setSwiper] = useState<CardStack | null>();
   const [users, setUsers] = useState<Partial<userType>[]>([]);
@@ -88,7 +88,7 @@ const Home = () => {
 
   return (
     <View style={styles.homeContaier}>
-      <Header />
+      <Header setIsVisible={setIsVisible} />
       <View style={styles.bodyContainer}>
         {loading && (
           <View style={styles.loadingContainer}>

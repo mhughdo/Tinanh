@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Logo from '@images/Logo';
 import GeneralStatusBarColor from '@components/GeneralStatusBarColor';
@@ -7,7 +7,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import normalize from 'react-native-normalize';
 
-const Header = () => {
+const Header = ({ setIsVisible }: { setIsVisible: Function }) => {
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -23,7 +23,12 @@ const Header = () => {
           />
         </TouchableOpacity>
         <Logo height={28} width={28} />
-        <Octicons color={colors.grey9} name="settings" size={28} />
+        <TouchableOpacity
+          onPress={() => {
+            setIsVisible(true);
+          }}>
+          <Octicons color={colors.grey9} name="settings" size={28} />
+        </TouchableOpacity>
       </View>
     </View>
   );
