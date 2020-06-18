@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import HomeScreen from '@containers/HomeScreen/HomeScreen';
 import MessageScreen from '@containers/MessageScreen/MessageScreen';
 import SettingsScreen from '@containers/SettingsScreen/SettingsScreen';
@@ -14,6 +14,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MessageBox from '@components/MessageBox';
 import Colors from '@constants/Colors';
 import normalize from 'react-native-normalize';
+import { ActionSheet } from 'native-base';
+import functions, { firebase } from '@react-native-firebase/functions';
 
 const Tab = createBottomTabNavigator();
 const RootStack = createStackNavigator();
@@ -52,23 +54,54 @@ const MessageStackScreen = () => {
       <MessageStack.Screen
         name="MessageBox"
         component={MessageBox}
-        options={({ route, navigation }) => ({
-          title: route?.params?.user?.displayName || 'Message',
-          headerLeft: () => (
-            <Ionicons
-              name="ios-arrow-back"
-              size={28}
-              style={{ paddingLeft: normalize(10) }}
-              color={Colors.mainTextColor}
-              onPress={() => {
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: 'MessageScreen' }],
-                });
-              }}
-            />
-          ),
-        })}
+        options={({ route, navigation }) => {
+          const BUTTONS = ['UNMATCH', 'Cancel'];
+          const CANCEL_INDEX = 4;
+
+          return {
+            title: route?.params?.user?.displayName || 'Message',
+            headerLeft: () => (
+              <Ionicons
+                name="ios-arrow-back"
+                size={28}
+                style={{ paddingLeft: normalize(10) }}
+                color={Colors.mainTextColor}
+                onPress={() => {
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'MessageScreen' }],
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <AntDesign
+                name="setting"
+                size={28}
+                style={{ paddingRight: normalize(10) }}
+                color={Colors.mainThemeForegroundColor}
+                onPress={() => {
+                  ActionSheet.show(
+                    {
+                      options: BUTTONS,
+                      cancelButtonIndex: CANCEL_INDEX,
+                      title: 'Actions',
+                    },
+                    (buttonIndex) => {
+                      if (buttonIndex === 0) {
+                        functions().httpsCallable('unMatch')({ id: route?.params?.user?.id });
+                        navigation.reset({
+                          index: 0,
+                          routes: [{ name: 'MessageScreen', params: { unMatchUserID: route?.params?.user?.id } }],
+                        });
+                      }
+                    },
+                  );
+                }}
+              />
+            ),
+          };
+        }}
       />
     </MessageStack.Navigator>
   );

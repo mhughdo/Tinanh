@@ -133,6 +133,7 @@ const ProfileScreen = () => {
             photos,
             ...(shouldUpdateAvatar && { avatarURL }),
           });
+          console.log('aaaaaaaa');
           imageDispatch({ type: 'ADD_IMAGE', idx, uri, loading: false });
         }
       },

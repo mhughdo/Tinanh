@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, StatusBar 
 import normalize from 'react-native-normalize';
 import Colors from '@constants/Colors';
 import fontSize from '@constants/fontSize';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import functions from '@react-native-firebase/functions';
 import { userType } from '@reducers/appReducer';
 import useAuth from '@hooks/useAuth';
@@ -17,10 +17,22 @@ export default function Message() {
   const [messages, setMessages] = useState<any[]>([]);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const { auth } = useAuth();
+  const route = useRoute();
 
   const messageBoxIDs = auth?.messages.map((item) => item.messageBoxID);
 
   const userID = auth?.id || '';
+
+  useEffect(() => {
+    if (route.params?.unMatchUserID) {
+      console.log(route.params?.unMatchUserID);
+
+      if (matches.length) {
+        setMatches(matches?.filter((match) => match.id !== route.params?.unMatchUserID));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route.params?.unMatchUserID]);
 
   useEffect(() => {
     try {
@@ -29,7 +41,7 @@ export default function Message() {
         .firestore()
         .doc(`users/${auth?.id}`)
         .onSnapshot(async (userSnapshot: any) => {
-          const res: any[] = [];
+          let res: any[] = [];
           setMatchesLoading(true);
           const matchedUsers = userSnapshot.data()?.matches || [];
 
@@ -39,6 +51,9 @@ export default function Message() {
           }
           if (stillMounted) {
             if (res.length) {
+              if (route.params?.unMatchUserID) {
+                res = res?.filter((match) => match.id !== route.params?.unMatchUserID);
+              }
               setMatches(res);
             }
             setMatchesLoading(false);
@@ -52,7 +67,9 @@ export default function Message() {
       setMatchesLoading(false);
       console.log(error);
     }
-  }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route.params?.unMatchUserID]);
 
   useEffect(() => {
     try {
@@ -62,7 +79,7 @@ export default function Message() {
         .orderBy('latestMessage.createdAt', 'desc')
         .onSnapshot(async (querySnapshot: any) => {
           setMessagesLoading(true);
-          const messages: any[] = [];
+          let messages: any[] = [];
           const messageSnapshots = querySnapshot.docs.filter((documentSnapshot: any) =>
             messageBoxIDs?.includes(documentSnapshot.id),
           );
@@ -83,6 +100,9 @@ export default function Message() {
           }
           if (stillMounted) {
             if (messages.length) {
+              if (route.params?.unMatchUserID) {
+                messages = messages?.filter((message) => message.partner.id !== route.params?.unMatchUserID);
+              }
               setMessages(messages);
             }
             setMessagesLoading(false);
@@ -96,7 +116,8 @@ export default function Message() {
       setMessagesLoading(false);
       console.log(error.message);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route.params?.unMatchUserID]);
 
   const navigation = useNavigation();
 
@@ -141,6 +162,7 @@ export default function Message() {
               {messages.map((message) => {
                 return (
                   <TouchableOpacity
+                    key={message.partner.id}
                     onPress={() =>
                       navigation.navigate('MessageBox', { user: message.partner, messageBoxID: message._id })
                     }>
