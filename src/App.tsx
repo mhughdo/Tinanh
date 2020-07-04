@@ -15,10 +15,12 @@ import AddUserInfoScreen from '@components/AddUserInfo';
 import Geolocation from 'react-native-geolocation-service';
 import functions from '@react-native-firebase/functions';
 
+console.disableYellowBox = true;
+
 // Use a local emulator in development
-// if (__DEV__) {
-//   functions().useFunctionsEmulator('http://localhost:5001');
-// }
+if (__DEV__) {
+  functions().useFunctionsEmulator('http://localhost:5001');
+}
 
 //WARNING SUPPRESSION
 import { YellowBox } from 'react-native';

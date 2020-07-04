@@ -150,7 +150,7 @@ export default function Message() {
                     key={user.displayName}
                     style={styles.matchUserContainer}>
                     <View style={styles.matchAvatarContainer}>
-                      <Image source={{ uri: user.avatarURL }} style={styles.matchAvatar} />
+                      <FastImage source={{ uri: user.avatarURL }} style={styles.matchAvatar} />
                     </View>
                     <View style={styles.matchTextContainer}>
                       <Text style={styles.matchText}>{user.displayName}</Text>

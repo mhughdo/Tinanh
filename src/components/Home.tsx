@@ -100,7 +100,7 @@ const Home = ({ isVisible, setIsVisible }: { setIsVisible: Function }) => {
           style={styles.cardStackContainer}
           disableBottomSwipe
           secondCardZoom={1}
-          renderNoMoreCards={users.length === 0 && !loading ? () => <NoMoreCards /> : () => null}
+          renderNoMoreCards={!loading ? () => <NoMoreCards /> : () => null}
           // onSwiped={(index) => console.log(index)}
           onSwipedRight={handleSwipedUporRight}
           onSwipedTop={(idx) => handleSwipedUporRight(idx, true)}

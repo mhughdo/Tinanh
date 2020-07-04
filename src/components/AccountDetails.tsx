@@ -34,7 +34,7 @@ const AccountDetails = () => {
   const navigation = useNavigation();
   const { auth } = useAuth();
   useEffect(() => {
-    console.log(auth);
+    // console.log(auth);
     let { displayName, dob, bio, school } = auth as UserType;
     let date = dob.toDate().getDate();
     let month = dob.toDate().getMonth() + 1;
@@ -62,6 +62,7 @@ const AccountDetails = () => {
           type: 'success',
           duration: 3000,
         });
+        navigation.goBack();
       });
   };
   return (
